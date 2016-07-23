@@ -32,6 +32,9 @@ using FingerboxLib;
 using FingerboxLib.Interface;
 using KSPPluginFramework;
 
+using KSP.UI;
+using KSP.UI.Screens;
+
 namespace CrewQueue.Interface
 {
     [KSPAddon(KSPAddon.Startup.EveryScene,true)]

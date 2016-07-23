@@ -25,9 +25,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using FingerboxLib;
+using KSP;
+using UnityEngine;
 
 namespace CrewQueue
 {

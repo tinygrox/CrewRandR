@@ -1,35 +1,40 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\FingerboxLib\Source\KSPPluginFramework\ConfigNodeStorage.cs">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Interface\SceneModule.cs">
     <Files>
       <File FileName="CrewQ.cs" Line="58" Column="40" />
       <File FileName="Interface\SpaceCenterModule.cs" Line="1" Column="1" />
-      <File FileName="API\CrewQAPI.cs" Line="1" Column="1" />
       <File FileName="..\..\FingerboxLib\Source\FingerboxLib.csproj" Line="1" Column="1" />
-      <File FileName="..\..\FingerboxLib\Source\Interface\ProtoAppLauncher.cs" Line="1" Column="1" />
-      <File FileName="Interface\SceneModule.cs" Line="1" Column="1" />
-      <File FileName="CrewQData.cs" Line="1" Column="1" />
-      <File FileName="..\..\FingerboxLib\Source\KSPPluginFramework\ConfigNodeStorage.cs" Line="1" Column="1" />
+      <File FileName="..\..\FingerboxLib\Source\Interface\ProtoAppLauncher.cs" Line="30" Column="22" />
+      <File FileName="Interface\SceneModule.cs" Line="75" Column="38" />
+      <File FileName="..\..\FingerboxLib\Source\KSPPluginFramework\ConfigNodeStorage.cs" Line="34" Column="47" />
+      <File FileName="..\..\FingerboxLib\Source\KSPPluginFramework\ExtensionsUnity.cs" Line="33" Column="22" />
+      <File FileName="Interface\AppLauncher.cs" Line="36" Column="22" />
+      <File FileName="CrewQueueRoster.cs" Line="28" Column="1" />
+      <File FileName="CrewQueueSettings.cs" Line="80" Column="48" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
+        <State name="__root__">
           <Node name="CrewQ" expanded="True">
-            <Node name="References" expanded="True" selected="True" />
-            <Node name="API" expanded="True" />
-            <Node name="Interface" expanded="True" />
-          </Node>
-          <Node name="FingerboxLib" expanded="True">
-            <Node name="References" expanded="True" />
-            <Node name="Interface" expanded="True" />
-            <Node name="KSPPluginFramework" expanded="True" />
+            <Node name="CrewQ" expanded="True">
+              <Node name="References" expanded="True" />
+              <Node name="Interface" expanded="True">
+                <Node name="SceneModule.cs" selected="True" />
+              </Node>
+            </Node>
+            <Node name="FingerboxLib" expanded="True">
+              <Node name="References" expanded="True" />
+              <Node name="Interface" expanded="True" />
+              <Node name="KSPPluginFramework" expanded="True" />
+            </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

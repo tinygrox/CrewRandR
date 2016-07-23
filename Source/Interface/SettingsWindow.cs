@@ -29,6 +29,9 @@ using System.Text;
 using KSPPluginFramework;
 using UnityEngine;
 using FingerboxLib;
+using KSP;
+using KSP.UI.Screens;
+using UnityEngine.UI;
 
 namespace CrewQueue.Interface
 {
@@ -168,11 +171,11 @@ namespace CrewQueue.Interface
             string dialogMsg = "<color=white>Are you sure that you want to <color=red>permanently remove</color> the icon for this settings menu?\n\nYou will only be to recover it by <color=orange>manually editing</color> your save file.</color>";
             string windowTitle = "WARNING";
 
-            DialogOption[] options = { new DialogOption("Cancel", HideCancel), new DialogOption("<color=orange>Confirm</color>", HideConfirm) };
+            DialogGUIBase[] options = { new DialogGUIButton("Cancel", HideCancel), new DialogGUIButton("<color=orange>Confirm</color>", HideConfirm) };
 
-            MultiOptionDialog confirmationBox = new MultiOptionDialog(dialogMsg, windowTitle, HighLogic.Skin, options);
+            MultiOptionDialog confirmationBox = new MultiOptionDialog(dialogMsg, windowTitle, HighLogic.UISkin, options);
 
-            popup = PopupDialog.SpawnPopupDialog(confirmationBox, false, HighLogic.Skin);
+            popup = PopupDialog.SpawnPopupDialog(confirmationBox, false, HighLogic.UISkin);
         }
 
         public void HideCancel()

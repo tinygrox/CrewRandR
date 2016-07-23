@@ -22,14 +22,14 @@
  * THE SOFTWARE.
  */
 
+using KSP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+//using System.Text;
 
-using UnityEngine;
-using KSPPluginFramework;
-using FingerboxLib;
+//using KSPPluginFramework;
+//using FingerboxLib;
 
 namespace CrewQueue
 {
