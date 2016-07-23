@@ -32,14 +32,14 @@ using FingerboxLib;
 using FingerboxLib.Interface;
 using KSPPluginFramework;
 
-namespace CrewQ.Interface
+namespace CrewQueue.Interface
 {
     [KSPAddon(KSPAddon.Startup.EveryScene,true)]
     class AppLauncher : ProtoAppLauncher
     {        
         public override Texture AppLauncherIcon
         {
-            get { return GameDatabase.Instance.GetTexture("Fingerboxes/CrewQ/Icons/appLauncher", false); }
+            get { return GameDatabase.Instance.GetTexture("Fingerboxes/CrewQueue/Icons/appLauncher", false); }
         }
 
         public override ApplicationLauncher.AppScenes Visibility
@@ -49,7 +49,7 @@ namespace CrewQ.Interface
                 try
                 {
                     bool coalescedCondition = (settingsWindow != null) &&
-                                              (CrewQData.Instance.settingHideSettingsIcon == false || settingsWindow.Visible == true);
+                                              (CrewQueueSettings.Instance.HideSettingsIcon == false || settingsWindow.Visible == true);
 
                     return coalescedCondition ? ApplicationLauncher.AppScenes.SPACECENTER : ApplicationLauncher.AppScenes.NEVER;
                 }

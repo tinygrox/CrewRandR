@@ -7,6 +7,9 @@
 *.userosscache
 *.sln.docstates
 *.dll
+Source/ref/*.*
+
+#ignore this
 
 # User-specific allows
 !/GameData/ModuleManager.*.dll

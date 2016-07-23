@@ -33,13 +33,13 @@ using KSPPluginFramework;
 
 using System.Reflection;
 
-namespace CrewQ.Interface
+namespace CrewQueue.Interface
 {
     public abstract class SceneModule : MonoBehaviourExtended
     {
         public void CleanManifest()
         {
-            if (CMAssignmentDialog.Instance != null && (CrewQData.Instance.settingRemoveDefaultCrews || CrewQData.Instance.settingDoCustomAssignment))
+            if (CMAssignmentDialog.Instance != null)
             {
                 VesselCrewManifest originalVesselManifest = CMAssignmentDialog.Instance.GetManifest();
                 IList<PartCrewManifest> partCrewManifests = originalVesselManifest.GetCrewableParts();
@@ -55,16 +55,16 @@ namespace CrewQ.Interface
                             partManifest.RemoveCrewFromSeat(partManifest.GetCrewSeat(crewMember));
                         }
                     }
-                    if (CrewQData.Instance.settingDoCustomAssignment)
+                    if (CrewQueueSettings.Instance.AssignCrews)
                     {
-                        partManifest.AddCrewToOpenSeats(CrewQ.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, true));
+                        partManifest.AddCrewToOpenSeats(CrewQueue.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, new List<ProtoCrewMember>(), true));
                     }
                 }
 
                 CMAssignmentDialog.Instance.RefreshCrewLists(originalVesselManifest, true, true);
             }
         }
-
+        
         public void RemapFillButton()
         {
             BTButton[] buttons = MiscUtils.GetFields<BTButton>(CMAssignmentDialog.Instance);
@@ -76,15 +76,18 @@ namespace CrewQ.Interface
         {
             if (eventPointer.evt == POINTER_INFO.INPUT_EVENT.TAP)
             {
-                Logging.Debug("Fill Button Pressed");                
-                if (CrewQData.Instance.settingDoCustomAssignment)
+                VesselCrewManifest manifest = CMAssignmentDialog.Instance.GetManifest();
+
+                Logging.Debug("Attempting to fill...");
+
+                foreach (PartCrewManifest partManifest in manifest.GetCrewableParts())
                 {
-                    // TODO - make this work.
+                    Logging.Debug("Attempting to fill part - " + partManifest.PartInfo.name);
+                    bool vets = (partManifest == manifest.GetCrewableParts()[0]) ? true : false;
+                    partManifest.AddCrewToOpenSeats(CrewQueue.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, manifest.GetAllCrew(false), vets));
                 }
-                else
-                {
-                    CMAssignmentDialog.Instance.ButtonFill(ref eventPointer);
-                }
+
+                CMAssignmentDialog.Instance.RefreshCrewLists(manifest, true, true);
             }
         }
     }    

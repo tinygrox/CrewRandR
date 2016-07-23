@@ -32,7 +32,7 @@ using UnityEngine;
 using KSPPluginFramework;
 using FingerboxLib;
 
-namespace CrewQ.Interface
+namespace CrewQueue.Interface
 {
     [KSPAddon(KSPAddon.Startup.EditorAny, false)]
     class EditorModule : SceneModule
@@ -42,6 +42,7 @@ namespace CrewQ.Interface
         // Monobehaviour Methods
         protected override void Awake()
         {
+            base.Awake();
             GameEvents.onEditorShipModified.Add(OnEditorShipModified);
             GameEvents.onEditorScreenChange.Add(OnEditorScreenChanged);
         }
@@ -57,35 +58,36 @@ namespace CrewQ.Interface
             if (screen == EditorScreen.Crew)
             {
                 RemapFillButton();
-                CrewQ.Instance.HideVacationingCrew();
+                CrewQueueRoster.HideVacationingCrew();
             }
             else
             {
-                CrewQ.Instance.ShowVacationingCrew();
+                CrewQueueRoster.RestoreVacationingCrew();
             }
-
-            CMAssignmentDialog.Instance.RefreshCrewLists(CMAssignmentDialog.Instance.GetManifest(), true, true);
         }
 
         // Our methods
         protected override void Update()
         {
-            try
+            if (CrewQueueSettings.Instance.AssignCrews)
             {
-                if (rootExists && !cleanedRoot)
+                try
                 {
-                    CleanManifest();
-                    cleanedRoot = true;
+                    if (rootExists && !cleanedRoot)
+                    {
+                        CleanManifest();
+                        cleanedRoot = true;
+                    }
+                    else if (!rootExists && cleanedRoot)
+                    {
+                        cleanedRoot = false;
+                    }
                 }
-                else if (!rootExists && cleanedRoot)
+                catch (Exception)
                 {
-                    cleanedRoot = false;
+                    // No worries!
+                    Logging.Debug("If there is a problem with clearing the roster, look here.");
                 }
-            }
-            catch (Exception)
-            {
-                // No worries!
-                Logging.Debug("If there is a problem with clearing the roster, look here.");
             }
         }
 

@@ -31,7 +31,7 @@ using UnityEngine;
 using KSPPluginFramework;
 using FingerboxLib;
 
-namespace CrewQ.Interface
+namespace CrewQueue.Interface
 {
     [KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
     class SpaceCenterModule : SceneModule
@@ -40,6 +40,7 @@ namespace CrewQ.Interface
 
         protected override void Awake()
         {
+            base.Awake();
             GameEvents.onGUILaunchScreenVesselSelected.Add(onVesselSelected);
             GameEvents.onGUIAstronautComplexSpawn.Add(onGUIAstronautComplexSpawn);
             GameEvents.onGUIAstronautComplexDespawn.Add(onGUIAstronautComplexDespawn);
@@ -56,10 +57,11 @@ namespace CrewQ.Interface
 
                 foreach (CrewItemContainer crewContainer in crewItemContainers)
                 {
-                    if (crewContainer.GetCrewRef().type == ProtoCrewMember.KerbalType.Crew && crewContainer.GetCrewRef().OnVacation())
+                    if (crewContainer.GetCrewRef().type == ProtoCrewMember.KerbalType.Crew && crewContainer.GetCrewRef().IsOnVacation())
                     {
+                        // TODO - This needs attention
                         Logging.Debug("relabeling: " + crewContainer.GetName());
-                        string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().GetVacationTimer() - Planetarium.GetUniversalTime());
+                        string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime());
                         crewContainer.SetLabel(label);
                     }
                 }
@@ -78,13 +80,12 @@ namespace CrewQ.Interface
 
         private void onGUILaunchScreenSpawn(GameEvents.VesselSpawnInfo info)
         {
-            CrewQ.Instance.HideVacationingCrew();
-            CMAssignmentDialog.Instance.RefreshCrewLists(CMAssignmentDialog.Instance.GetManifest(), true, true);
+            CrewQueueRoster.HideVacationingCrew();
         }
 
         private void onGUILaunchScreenDespawn()
         {
-            CrewQ.Instance.ShowVacationingCrew();
+            CrewQueueRoster.RestoreVacationingCrew();
         }
 
         private void onVesselSelected(ShipTemplate shipTemplate)
