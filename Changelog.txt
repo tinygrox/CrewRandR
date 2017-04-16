@@ -1,0 +1,4 @@
+ 1.1.0
+        Adoption by Linuxgurugamer
+        Updated for 1.2.*
+		Fixed bug where endless loop ocured when no available primary for the pod
