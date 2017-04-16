@@ -24,14 +24,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
+using KSP.UI;
 
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 using FingerboxLib;
 using KSPPluginFramework;
 
 using System.Reflection;
+
+
 
 namespace CrewQueue.Interface
 {
@@ -39,9 +45,9 @@ namespace CrewQueue.Interface
     {
         public void CleanManifest()
         {
-            if (CMAssignmentDialog.Instance != null)
+            if ( CrewAssignmentDialog.Instance != null)
             {
-                VesselCrewManifest originalVesselManifest = CMAssignmentDialog.Instance.GetManifest();
+                VesselCrewManifest originalVesselManifest =  CrewAssignmentDialog.Instance.GetManifest();
                 IList<PartCrewManifest> partCrewManifests = originalVesselManifest.GetCrewableParts();
 
                 if (partCrewManifests != null && partCrewManifests.Count > 0)
@@ -61,34 +67,44 @@ namespace CrewQueue.Interface
                     }
                 }
 
-                CMAssignmentDialog.Instance.RefreshCrewLists(originalVesselManifest, true, true);
+                 CrewAssignmentDialog.Instance.RefreshCrewLists(originalVesselManifest, true, true);
             }
         }
-        
+
+        UnityAction fillDelegate, defaultFillDelgate;
+
         public void RemapFillButton()
         {
-            BTButton[] buttons = MiscUtils.GetFields<BTButton>(CMAssignmentDialog.Instance);
-            buttons[0].RemoveInputDelegate(new EZInputDelegate(CMAssignmentDialog.Instance.ButtonFill));
-            buttons[0].AddInputDelegate(new EZInputDelegate(OnFillButton));
-        }
+            var buttonFillObj = CrewAssignmentDialog.Instance.transform.Find("VL/Buttons/Button Fill"); // <-- GetComponent<Button> on this if found
+            if (buttonFillObj == null)
+                return;
 
-        public void OnFillButton(ref POINTER_INFO eventPointer)
-        {
-            if (eventPointer.evt == POINTER_INFO.INPUT_EVENT.TAP)
+            Button buttonFillBtn = buttonFillObj.GetComponent<Button>();
+           
+            if (buttonFillBtn != null)
             {
-                VesselCrewManifest manifest = CMAssignmentDialog.Instance.GetManifest();
-
-                Logging.Debug("Attempting to fill...");
-
-                foreach (PartCrewManifest partManifest in manifest.GetCrewableParts())
-                {
-                    Logging.Debug("Attempting to fill part - " + partManifest.PartInfo.name);
-                    bool vets = (partManifest == manifest.GetCrewableParts()[0]) ? true : false;
-                    partManifest.AddCrewToOpenSeats(CrewQueue.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, manifest.GetAllCrew(false), vets));
-                }
-
-                CMAssignmentDialog.Instance.RefreshCrewLists(manifest, true, true);
+                buttonFillBtn.onClick.RemoveAllListeners();                
+                buttonFillBtn.onClick.SetPersistentListenerState(0, UnityEventCallState.Off);
+                buttonFillBtn.onClick.AddListener(OnFillButton);
             }
         }
-    }    
+
+        public void OnFillButton()
+        {
+            VesselCrewManifest manifest =  CrewAssignmentDialog.Instance.GetManifest();
+
+            Logging.Debug("Attempting to fill...");
+
+            foreach (PartCrewManifest partManifest in manifest.GetCrewableParts())
+            {
+                Logging.Debug("Attempting to fill part - " + partManifest.PartInfo.name);
+                bool vets = (partManifest == manifest.GetCrewableParts()[0]) ? true : false;
+                partManifest.AddCrewToOpenSeats(CrewQueue.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, manifest.GetAllCrew(false), vets));
+            }
+
+            CrewAssignmentDialog.Instance.RefreshCrewLists(manifest, true, true);
+            
+        }
+
+    }
 }

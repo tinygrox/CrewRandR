@@ -29,6 +29,8 @@ using System.Text;
 
 using UnityEngine;
 using KSPPluginFramework;
+using KSP.UI;
+using KSP.UI.Screens;
 using FingerboxLib;
 
 namespace CrewQueue.Interface
@@ -53,18 +55,25 @@ namespace CrewQueue.Interface
             if (astronautComplexSpawned)
             {
                 Logging.Debug("AC is spawned...");
-                IEnumerable<CrewItemContainer> crewItemContainers = GameObject.FindObjectsOfType<CrewItemContainer>().Where(x => x.GetCrewRef().rosterStatus == ProtoCrewMember.RosterStatus.Available);
 
-                foreach (CrewItemContainer crewContainer in crewItemContainers)
+                AstronautComplex ac = GameObject.FindObjectOfType<AstronautComplex>();
+                if (ac)
                 {
-                    if (crewContainer.GetCrewRef().type == ProtoCrewMember.KerbalType.Crew && crewContainer.GetCrewRef().IsOnVacation())
+                    foreach (var s in ac.ScrollListAvailable)
                     {
-                        // TODO - This needs attention
-                        Logging.Debug("relabeling: " + crewContainer.GetName());
-                        string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime());
-                        crewContainer.SetLabel(label);
+                        Logging.Info("");
+                        IEnumerable<CrewListItem> crewItemContainers = GameObject.FindObjectsOfType<CrewListItem>().Where(x => x.GetCrewRef().rosterStatus == ProtoCrewMember.RosterStatus.Available);
+                        foreach (CrewListItem crewContainer in crewItemContainers)
+                        {
+                            if (crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime() > 0)
+                            {
+                                Logging.Debug("relabeling: " + crewContainer.GetName());
+                                string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime());
+                                crewContainer.SetLabel(label);
+                            }
+                        }
                     }
-                }
+                }                
             }
         }
 

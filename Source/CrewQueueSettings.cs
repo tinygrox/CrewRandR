@@ -21,15 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-using KSP;
+ 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-//using System.Text;
+using System.Collections;
+using System.Reflection;
 
-//using KSPPluginFramework;
-//using FingerboxLib;
+
 
 namespace CrewQueue
 {
@@ -51,9 +49,12 @@ namespace CrewQueue
             }
         }
 
+#if false
         [KSPField(isPersistant = true)]
         public bool HideSettingsIcon = false;
+#endif
 
+#if false
         [KSPField(isPersistant = true)]
         public bool AssignCrews = true;
 
@@ -65,6 +66,12 @@ namespace CrewQueue
 
         [KSPField(isPersistant = true)]
         public int MaximumVacationDays = 28;
+#endif
+        public bool AssignCrews {  get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>().AssignCrews; } }
+        public double VacationScalar { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>().VacationScalar; } }
+        public int MinimumVacationDays { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>().MinimumVacationDays; } }
+        public int MaximumVacationDays { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>().MaximumVacationDays; } }
+        public bool Enabled { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>().enabled; } }
 
         public override void OnAwake()
         {
@@ -118,5 +125,71 @@ namespace CrewQueue
         }
     }
 
-    
+    //   HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>()
+
+    public class CrewQCustomParams : GameParameters.CustomParameterNode
+    {
+        public override string Title { get { return ""; } }
+        public override GameParameters.GameMode GameMode { get { return GameParameters.GameMode.ANY; } }
+        public override string Section { get { return "Crew Queue"; } }
+        public override int SectionOrder { get { return 1; } }
+        public override bool HasPresets { get { return true; } }
+
+#if false
+        [GameParameters.CustomParameterUI("Mod Enabled?",
+            toolTip = "Changing this requires restarting the game")]
+
+#endif
+        public bool enabled = true;
+
+
+        [GameParameters.CustomParameterUI("Automatically select crew?")]
+        public bool AssignCrews = true;
+
+        // The following crazy code is due to a bug introduced in 1.2.2
+        // See this link for details:  http://forum.kerbalspaceprogram.com/index.php?/topic/7542-the-official-unoffical-quothelp-a-fellow-plugin-developerquot-thread/&page=100#comment-2887044
+
+        // [GameParameters.CustomFloatParameterUI("Base vacation rate", asPercentage = true)]
+        //public float VacationScalar = .1f;       
+
+
+        public float vacationScalar = 0.1F;
+        [GameParameters.CustomFloatParameterUI("Base vacation rate (%)", displayFormat = "N0", minValue = 0, maxValue = 100, stepCount = 1, asPercentage = false,
+            toolTip = "The vacation time will be calculated by multiplying the mission length by this")]
+        public float VacationScalar
+        {
+            get { return vacationScalar * 100; }
+            set { vacationScalar = value / 100.0f; }
+        }
+
+        [GameParameters.CustomIntParameterUI("Minimum vacation days", minValue = 1, maxValue = 100,
+            toolTip = "Minimum time for vacation, overrides the calculated vacation")]
+        public int MinimumVacationDays = 7;         
+
+
+        [GameParameters.CustomIntParameterUI("Maximum vacation days", minValue = 1, maxValue = 100,
+            toolTip = "Maximum time for vacation, overrides the calculated vacation")]
+        public int MaximumVacationDays = 28;          
+
+
+        public override void SetDifficultyPreset(GameParameters.Preset preset)
+        {
+        }
+
+        public override bool Enabled(MemberInfo member, GameParameters parameters)
+        {
+            return true;
+        }
+        public override bool Interactible(MemberInfo member, GameParameters parameters)
+        {
+            if (MinimumVacationDays > MaximumVacationDays)
+                MaximumVacationDays = MinimumVacationDays;
+            return true;
+        }
+        public override IList ValidValues(MemberInfo member)
+        {
+            return null;
+        }
+    }
+
 }

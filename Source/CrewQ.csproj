@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,8 +9,6 @@
     <RootNamespace>CrewQueue</RootNamespace>
     <AssemblyName>CrewQueue</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,31 +28,30 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\..\Games\KSP_win_1.1.3_STOCK\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\..\Games\KSP_win_1.1.3_STOCK\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="KSPUtil">
-      <HintPath>..\..\..\..\..\..\Games\KSP_win_1.1.3_STOCK\KSP_x64_Data\Managed\KSPUtil.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\..\..\..\..\Games\KSP_win_1.1.3_TESTBED\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\..\..\..\Games\KSP_win_1.1.3_TESTBED\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="API\CrewQueueAPI.cs" />
     <Compile Include="API\CrewQueueProxy.cs" />
+    <Compile Include="AssemblyVersion.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssemblyVersion.tt</DependentUpon>
+    </Compile>
     <Compile Include="CrewQueue.cs" />
     <Compile Include="CrewQueueRoster.cs" />
     <Compile Include="CrewQueueSettings.cs" />
+    <Compile Include="FingerboxLib\Extensions\CoreExtensions.cs" />
+    <Compile Include="FingerboxLib\Extensions\EnumExtensions.cs" />
+    <Compile Include="FingerboxLib\Extensions\SquadExtensions.cs" />
+    <Compile Include="FingerboxLib\Interface\ProtoAppLauncher.cs" />
+    <Compile Include="FingerboxLib\KSPPluginFramework\ConfigNodeStorage.cs" />
+    <Compile Include="FingerboxLib\KSPPluginFramework\ConfigNodeUtils.cs" />
+    <Compile Include="FingerboxLib\KSPPluginFramework\ExtensionsUnity.cs" />
+    <Compile Include="FingerboxLib\KSPPluginFramework\MonoBehaviourExtended.cs" />
+    <Compile Include="FingerboxLib\KSPPluginFramework\MonoBehaviourWindow.cs" />
+    <Compile Include="FingerboxLib\KSPPluginFramework\MonoBehaviourWindowPlus.cs" />
+    <Compile Include="FingerboxLib\KSPPluginFramework\SkinsLibrary.cs" />
+    <Compile Include="FingerboxLib\Logging.cs" />
+    <Compile Include="FingerboxLib\MiscUtils.cs" />
+    <Compile Include="FingerboxLib\Utilities.cs" />
     <Compile Include="Interface\AppLauncher.cs" />
     <Compile Include="Interface\EditorModule.cs" />
     <Compile Include="Interface\SettingsWindow.cs" />
@@ -64,14 +60,47 @@
     <Compile Include="Interface\SpaceCenterModule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FingerboxLib\Source\FingerboxLib.csproj">
-      <Project>{6ae0ba91-9473-43e6-980d-c7b04ccaeb45}</Project>
-      <Name>FingerboxLib</Name>
-    </ProjectReference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>R:\KSP_1.2.2_dev\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>R:\KSP_1.2.2_dev\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <HintPath>R:\KSP_1.2.2_dev\KSP_x64_Data\Managed\System.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>R:\KSP_1.2.2_dev\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>R:\KSP_1.2.2_dev\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AssemblyVersion.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AssemblyVersion.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y $(TargetPath) $(TargetDir)..\..\..\GameData\Fingerboxes\CrewQueue\Plugins\</PostBuildEvent>
+    <PostBuildEvent>start /D D:\Users\jbb\github\CrewQ\  /WAIT deploy.bat
+
+if $(ConfigurationName) == Release (
+start /D D:\Users\jbb\github\CrewQ\  /WAIT buildRelease.bat
+)
+</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>set textTemplatingPath="%25CommonProgramFiles(x86)%25\Microsoft Shared\TextTemplating\$(VisualStudioVersion)\texttransform.exe"
+
+if %25textTemplatingPath%25=="\Microsoft Shared\TextTemplating\$(VisualStudioVersion)\texttransform.exe" set textTemplatingPath="%25CommonProgramFiles%25\Microsoft Shared\TextTemplating\$(VisualStudioVersion)\texttransform.exe"
+
+%25textTemplatingPath%25 "$(ProjectDir)AssemblyVersion.tt"
+</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

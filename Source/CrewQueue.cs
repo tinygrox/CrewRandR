@@ -34,7 +34,7 @@ using FingerboxLib;
 // Start reading here!
 namespace CrewQueue
 {
-    [KSPAddon(KSPAddon.Startup.EveryScene, true)]
+    [KSPAddon(KSPAddon.Startup.SpaceCentre, true)]
     public class CrewQueue : MonoBehaviourExtended
     {
         // ITS OVER NINE THOUSAND!!!!111
@@ -57,6 +57,7 @@ namespace CrewQueue
         // MonoBehaviour Methods
         protected override void Awake()
         {
+            Logging.Info("CrewQueue.Awake");
             DontDestroyOnLoad(this);
             _Instance = this;            
             GameEvents.OnVesselRecoveryRequested.Add(OnVesselRecoveryRequested);
@@ -65,7 +66,7 @@ namespace CrewQueue
 
         // KSP Events
         void OnVesselRecoveryRequested(Vessel vessel)
-        {         
+        {
             foreach (ProtoCrewMember kerbal in vessel.GetVesselCrew())
             {
                 kerbal.SetLastMissionData(vessel.missionTime, Planetarium.GetUniversalTime());
@@ -84,8 +85,7 @@ namespace CrewQueue
             string[] crewCompositionStrings;
             int numToSelect = partPrefab.CrewCapacity;
             Dictionary<string, IEnumerable<ProtoCrewMember>> crewComposition = new Dictionary<string, IEnumerable<ProtoCrewMember>>();
-
-            Logging.Debug("Listing availableCrew");
+            
             foreach (ProtoCrewMember crew in availableCrew)
             {
                 Logging.Debug(" + " + crew.name);
@@ -100,7 +100,7 @@ namespace CrewQueue
             }
             else
             {
-                crewCompositionStrings = new string[] { "Pilot", "Engineer", "Scientist" };
+                crewCompositionStrings = new string[] { "Pilot", "Engineer", "Scientist", "Tourist" };
             }
 
             Logging.Debug("Using Composition String ... \"" + string.Join(",",crewCompositionStrings) + "\"");
@@ -111,6 +111,8 @@ namespace CrewQueue
             }
 
             // First Pass
+            bool primaryAdded = false;
+            Logging.Debug("First pass, numToSelect: " + numToSelect.ToString());
             foreach (string type in crewCompositionStrings)
             {
                 if (numToSelect > 0)
@@ -120,9 +122,13 @@ namespace CrewQueue
                         partCrew.Add(crewComposition[type].FirstOrDefault());
                         crewComposition[type] = crewComposition[type].Except(partCrew);
                         numToSelect--;
+                        primaryAdded = true;
                     }
                 }
             }
+            if (!primaryAdded)
+                return partCrew;
+            Logging.Debug("Second pass, numToSelect: " + numToSelect.ToString());
 
             for (int i = 0; i < numToSelect; i++)
             {

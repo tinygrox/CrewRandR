@@ -42,7 +42,7 @@ namespace CrewQueue.Interface
     {        
         public override Texture AppLauncherIcon
         {
-            get { return GameDatabase.Instance.GetTexture("Fingerboxes/CrewQueue/Icons/appLauncher", false); }
+            get { return GameDatabase.Instance.GetTexture("CrewQueue/Icons/appLauncher", false); }
         }
 
         public override ApplicationLauncher.AppScenes Visibility
@@ -51,10 +51,13 @@ namespace CrewQueue.Interface
             {
                 try
                 {
+                    return ApplicationLauncher.AppScenes.NEVER;
+#if false
                     bool coalescedCondition = (settingsWindow != null) &&
                                               (CrewQueueSettings.Instance.HideSettingsIcon == false || settingsWindow.Visible == true);
 
                     return coalescedCondition ? ApplicationLauncher.AppScenes.SPACECENTER : ApplicationLauncher.AppScenes.NEVER;
+#endif
                 }
                 catch (Exception)
                 {
@@ -67,6 +70,7 @@ namespace CrewQueue.Interface
             }
         }
 
+#if false
         private SettingsWindow settingsWindow;
 
         protected override void onGUIApplicationLauncherReady()
@@ -83,5 +87,6 @@ namespace CrewQueue.Interface
         {
             settingsWindow.Visible = false;
         }
+#endif
     }
 }

@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using FingerboxLib;
-using KSP;
+using KSP.UI;
 using UnityEngine;
 
 namespace CrewQueue
@@ -137,16 +137,27 @@ namespace CrewQueue
             {
                 kerbal.rosterStatus = CrewQueue.ROSTERSTATUS_VACATION;
             }
-            CMAssignmentDialog.Instance.RefreshCrewLists(CMAssignmentDialog.Instance.GetManifest(), true, true);
+            CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, true);
         }
 
         public static void RestoreVacationingCrew()
         {
+            if (HighLogic.CurrentGame == null || HighLogic.CurrentGame.CrewRoster == null || HighLogic.CurrentGame.CrewRoster.Crew == null)
+                return;
+            
+            var s = HighLogic.CurrentGame.CrewRoster.Crew;            
+
             foreach (ProtoCrewMember kerbal in HighLogic.CurrentGame.CrewRoster.Crew.Where(k => k.rosterStatus == CrewQueue.ROSTERSTATUS_VACATION))
             {
                 kerbal.rosterStatus = ProtoCrewMember.RosterStatus.Available;
             }
-            CMAssignmentDialog.Instance.RefreshCrewLists(CMAssignmentDialog.Instance.GetManifest(), true, true);
+            
+            if (CrewAssignmentDialog.Instance == null)
+            {
+                Logging.Info("CrewAssignmentDialog.Instance is null");
+                return;
+            }
+            CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, true);
         }
 
         // Our storage node type.
@@ -168,14 +179,14 @@ namespace CrewQueue
             {
                 get
                 {
-                    if (LastMissionDuration > -1)
+                    if (LastMissionDuration > -1 && LastMissionEndTime > -1)
                     {
-                        double VacationScalar = CrewQueueSettings.Instance.VacationScalar,
-                               MinimumVacationDays = CrewQueueSettings.Instance.MinimumVacationDays * Utilities.GetDayLength,
-                               MaximumVacationDays = CrewQueueSettings.Instance.MaximumVacationDays * Utilities.GetDayLength,
-                               Expiry = LastMissionEndTime + (LastMissionDuration * VacationScalar).Clamp(MinimumVacationDays, MaximumVacationDays);
+                        double VacationScalar = CrewQueueSettings.Instance.VacationScalar;
+                        double MinimumVacationDays = CrewQueueSettings.Instance.MinimumVacationDays * Utilities.GetDayLength;
+                        double MaximumVacationDays = CrewQueueSettings.Instance.MaximumVacationDays * Utilities.GetDayLength;
+                        double Expiry = LastMissionEndTime + (LastMissionDuration * VacationScalar).Clamp(MinimumVacationDays, MaximumVacationDays);
 
-                        Logging.Debug("EXPIRY: " + Expiry);
+                        Logging.Debug("name: " + Name + "   lastMissionDuration: " + LastMissionDuration.ToString() + "   LastMissionEndtime: " + LastMissionEndTime.ToString() + "   EXPIRY: " + Expiry);
 
                         return Expiry;
                     }
@@ -259,6 +270,7 @@ namespace CrewQueue
     {
         public static void SetLastMissionData(this ProtoCrewMember kerbal, double newMissionDuration, double currentTime)
         {
+            Logging.Debug("RosterExtensions.SetLastMissionData");
             CrewQueueRoster.Instance.GetExtForKerbal(kerbal).LastMissionDuration = newMissionDuration;
             CrewQueueRoster.Instance.GetExtForKerbal(kerbal).LastMissionEndTime = currentTime;
             GamePersistence.SaveGame("persistent", HighLogic.SaveFolder, SaveMode.OVERWRITE);
