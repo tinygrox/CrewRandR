@@ -61,7 +61,7 @@ namespace CrewRandR.Interface
                             partManifest.RemoveCrewFromSeat(partManifest.GetCrewSeat(crewMember));
                         }
                     }
-                    if (CrewRandRSettings.Instance.AssignCrews)
+                    if (CrewRandRSettings.Instance != null && CrewRandRSettings.Instance.AssignCrews)
                     {
                         partManifest.AddCrewToOpenSeats(CrewRandR.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, new List<ProtoCrewMember>(), true));
                     }

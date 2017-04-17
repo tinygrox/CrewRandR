@@ -8,3 +8,6 @@
 		Cleaned up some log spam
 1.1.0.2
 		Renamed mod to Crew R&R, renamed everything to match, including directory
+
+1.1.0.3
+		Removed some more log spam

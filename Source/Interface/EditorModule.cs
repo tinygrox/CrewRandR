@@ -69,7 +69,7 @@ namespace CrewRandR.Interface
         // Our methods
         protected override void Update()
         {
-            if (CrewRandRSettings.Instance.AssignCrews)
+            if (CrewRandRSettings.Instance != null && CrewRandRSettings.Instance.AssignCrews)
             {
                 try
                 {

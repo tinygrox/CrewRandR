@@ -179,7 +179,7 @@ namespace CrewRandR
             {
                 get
                 {
-                    if (LastMissionDuration > -1 && LastMissionEndTime > -1)
+                    if (CrewRandRSettings.Instance != null && LastMissionDuration > -1 && LastMissionEndTime > -1)
                     {
                         double VacationScalar = CrewRandRSettings.Instance.VacationScalar;
                         double MinimumVacationDays = CrewRandRSettings.Instance.MinimumVacationDays * Utilities.GetDayLength;
