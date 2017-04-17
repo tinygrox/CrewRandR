@@ -18,7 +18,7 @@ namespace FingerboxLib
             // Get the members we are going to assign
             IEnumerator<ProtoCrewMember> crewEnumerator = crewMembers.Take(openSeatIndexesCount).GetEnumerator();
 
-
+#if DEBUG
             Logging.Debug("indexLength:" + openSeatIndexes.ToArray().Length);
             foreach (int i in openSeatIndexes)
             {
@@ -29,6 +29,7 @@ namespace FingerboxLib
             {
                 Logging.Debug("crew:" + crew.name);
             }
+#endif
 
             foreach (int index in openSeatIndexes)
             {

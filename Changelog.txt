@@ -2,3 +2,7 @@
         Adoption by Linuxgurugamer
         Updated for 1.2.*
 		Fixed bug where endless loop ocured when no available primary for the pod
+1.1.0.1
+		Fixed syntax error in MM cfg file
+		Fixed endless loop when no good crew are available
+		Cleaned up some log spam

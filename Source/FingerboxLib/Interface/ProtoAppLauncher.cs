@@ -127,7 +127,6 @@ namespace FingerboxLib.Interface
 
         void _onGameSceneLoadRequested(GameScenes scene)
         {
-            Logging.Debug("Entering Method.");
             if (_button != null)
             {
                 _button.SetFalse();

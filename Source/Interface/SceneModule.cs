@@ -71,22 +71,31 @@ namespace CrewQueue.Interface
             }
         }
 
-        UnityAction fillDelegate, defaultFillDelgate;
 
+        bool initted = false;
         public void RemapFillButton()
         {
+            Logging.Info("RemapFillButton");
+            if (initted)
+                return;
             var buttonFillObj = CrewAssignmentDialog.Instance.transform.Find("VL/Buttons/Button Fill"); // <-- GetComponent<Button> on this if found
             if (buttonFillObj == null)
+            {
+                Logging.Error("buttonFillObj is null.");
                 return;
+            }
 
             Button buttonFillBtn = buttonFillObj.GetComponent<Button>();
-           
+
             if (buttonFillBtn != null)
             {
-                buttonFillBtn.onClick.RemoveAllListeners();                
+                buttonFillBtn.onClick.RemoveAllListeners();
                 buttonFillBtn.onClick.SetPersistentListenerState(0, UnityEventCallState.Off);
                 buttonFillBtn.onClick.AddListener(OnFillButton);
+                initted = true;
             }
+            else
+                Logging.Error("buttonFillBtn is null");
         }
 
         public void OnFillButton()

@@ -185,9 +185,7 @@ namespace CrewQueue
                         double MinimumVacationDays = CrewQueueSettings.Instance.MinimumVacationDays * Utilities.GetDayLength;
                         double MaximumVacationDays = CrewQueueSettings.Instance.MaximumVacationDays * Utilities.GetDayLength;
                         double Expiry = LastMissionEndTime + (LastMissionDuration * VacationScalar).Clamp(MinimumVacationDays, MaximumVacationDays);
-
-                        Logging.Debug("name: " + Name + "   lastMissionDuration: " + LastMissionDuration.ToString() + "   LastMissionEndtime: " + LastMissionEndTime.ToString() + "   EXPIRY: " + Expiry);
-
+                        
                         return Expiry;
                     }
                     else

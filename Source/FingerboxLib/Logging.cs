@@ -45,6 +45,7 @@ namespace FingerboxLib
             Log(MessageType.ERROR, message);
         }
 
+        [System.Diagnostics.Conditional("DEBUG")]
         public static void Info(string message)
         {
             Log(MessageType.INFO, message);

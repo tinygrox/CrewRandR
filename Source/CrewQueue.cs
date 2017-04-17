@@ -57,7 +57,6 @@ namespace CrewQueue
         // MonoBehaviour Methods
         protected override void Awake()
         {
-            Logging.Info("CrewQueue.Awake");
             DontDestroyOnLoad(this);
             _Instance = this;            
             GameEvents.OnVesselRecoveryRequested.Add(OnVesselRecoveryRequested);
@@ -91,7 +90,7 @@ namespace CrewQueue
                 Logging.Debug(" + " + crew.name);
             }
 
-            Logging.Debug("Selecting " + numToSelect + " crew members");
+            Logging.Debug("Part: " + partPrefab.partInfo.name + "   Selecting " + numToSelect + " crew members");
 
             //Get Crew Composition
             if (partPrefab.Modules.OfType<ModuleCrewQ>().Any())
@@ -108,6 +107,10 @@ namespace CrewQueue
             foreach (string element in crewCompositionStrings)
             {
                 crewComposition.Add(element, availableCrew.Where(x => x.experienceTrait.Title == element));
+                foreach (var s in crewComposition[element])
+                {
+                    Logging.Debug("Available crew for: " + element + "     " + s);
+                }
             }
 
             // First Pass
@@ -115,6 +118,7 @@ namespace CrewQueue
             Logging.Debug("First pass, numToSelect: " + numToSelect.ToString());
             foreach (string type in crewCompositionStrings)
             {
+                Logging.Debug("Selecting: " + type);
                 if (numToSelect > 0)
                 {
                     if (crewComposition[type].Count() > 0)
@@ -132,6 +136,11 @@ namespace CrewQueue
 
             for (int i = 0; i < numToSelect; i++)
             {
+                int numAvail = 0;
+                for (int x = 0; x < crewCompositionStrings.Count(); x++)
+                    numAvail += crewComposition[crewCompositionStrings[x]].Count();
+                if (numAvail == 0)
+                    break;
                 string type = crewCompositionStrings[new System.Random().Next(crewCompositionStrings.Length)];
                 if (crewComposition[type].Count() > 0)
                 {
