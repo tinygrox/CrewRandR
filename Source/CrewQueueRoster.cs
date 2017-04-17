@@ -30,27 +30,27 @@ using FingerboxLib;
 using KSP.UI;
 using UnityEngine;
 
-namespace CrewQueue
+namespace CrewRandR
 {
-    internal class CrewQueueRoster
+    internal class CrewRandRRoster
     {
         // Singleton boilerplate
-        private static CrewQueueRoster _Instance;
-        public static CrewQueueRoster Instance
+        private static CrewRandRRoster _Instance;
+        public static CrewRandRRoster Instance
         {
             get
             {
                 if (_Instance == null)
                 {
                     Logging.Debug("Initializing Roster");
-                    _Instance = new CrewQueueRoster();
+                    _Instance = new CrewRandRRoster();
                 }
 
                 return _Instance;
             }
         }
 
-        // The basic idea here is going to be that the CrewQueue 'metadata' doesn't exist
+        // The basic idea here is going to be that the CrewRandR 'metadata' doesn't exist
         // until it is queried or set. When we query the data set, anything that doesn't
         // match an existing Kerbal is omitted, causing it to be deleted on the next on
         // the next save cycle.
@@ -133,9 +133,9 @@ namespace CrewQueue
 
         public static void HideVacationingCrew()
         {
-            foreach (ProtoCrewMember kerbal in CrewQueueRoster.Instance.UnavailableCrew.Where(k => k.rosterStatus == ProtoCrewMember.RosterStatus.Available))
+            foreach (ProtoCrewMember kerbal in CrewRandRRoster.Instance.UnavailableCrew.Where(k => k.rosterStatus == ProtoCrewMember.RosterStatus.Available))
             {
-                kerbal.rosterStatus = CrewQueue.ROSTERSTATUS_VACATION;
+                kerbal.rosterStatus = CrewRandR.ROSTERSTATUS_VACATION;
             }
             CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, true);
         }
@@ -147,7 +147,7 @@ namespace CrewQueue
             
             var s = HighLogic.CurrentGame.CrewRoster.Crew;            
 
-            foreach (ProtoCrewMember kerbal in HighLogic.CurrentGame.CrewRoster.Crew.Where(k => k.rosterStatus == CrewQueue.ROSTERSTATUS_VACATION))
+            foreach (ProtoCrewMember kerbal in HighLogic.CurrentGame.CrewRoster.Crew.Where(k => k.rosterStatus == CrewRandR.ROSTERSTATUS_VACATION))
             {
                 kerbal.rosterStatus = ProtoCrewMember.RosterStatus.Available;
             }
@@ -181,9 +181,9 @@ namespace CrewQueue
                 {
                     if (LastMissionDuration > -1 && LastMissionEndTime > -1)
                     {
-                        double VacationScalar = CrewQueueSettings.Instance.VacationScalar;
-                        double MinimumVacationDays = CrewQueueSettings.Instance.MinimumVacationDays * Utilities.GetDayLength;
-                        double MaximumVacationDays = CrewQueueSettings.Instance.MaximumVacationDays * Utilities.GetDayLength;
+                        double VacationScalar = CrewRandRSettings.Instance.VacationScalar;
+                        double MinimumVacationDays = CrewRandRSettings.Instance.MinimumVacationDays * Utilities.GetDayLength;
+                        double MaximumVacationDays = CrewRandRSettings.Instance.MaximumVacationDays * Utilities.GetDayLength;
                         double Expiry = LastMissionEndTime + (LastMissionDuration * VacationScalar).Clamp(MinimumVacationDays, MaximumVacationDays);
                         
                         return Expiry;
@@ -269,34 +269,34 @@ namespace CrewQueue
         public static void SetLastMissionData(this ProtoCrewMember kerbal, double newMissionDuration, double currentTime)
         {
             Logging.Debug("RosterExtensions.SetLastMissionData");
-            CrewQueueRoster.Instance.GetExtForKerbal(kerbal).LastMissionDuration = newMissionDuration;
-            CrewQueueRoster.Instance.GetExtForKerbal(kerbal).LastMissionEndTime = currentTime;
+            CrewRandRRoster.Instance.GetExtForKerbal(kerbal).LastMissionDuration = newMissionDuration;
+            CrewRandRRoster.Instance.GetExtForKerbal(kerbal).LastMissionEndTime = currentTime;
             GamePersistence.SaveGame("persistent", HighLogic.SaveFolder, SaveMode.OVERWRITE);
         }
 
         public static double GetLastMissionDuration(this ProtoCrewMember kerbal)
         {
-            return CrewQueueRoster.Instance.GetExtForKerbal(kerbal).LastMissionDuration;
+            return CrewRandRRoster.Instance.GetExtForKerbal(kerbal).LastMissionDuration;
         }
 
         public static double VacationExpiry(this ProtoCrewMember kerbal)
         {
-            return CrewQueueRoster.Instance.GetExtForKerbal(kerbal).VacationExpiry;
+            return CrewRandRRoster.Instance.GetExtForKerbal(kerbal).VacationExpiry;
         }
 
         public static bool IsOnVacation(this ProtoCrewMember kerbal)
         {
-            return CrewQueueRoster.Instance.GetExtForKerbal(kerbal).OnVacation;
+            return CrewRandRRoster.Instance.GetExtForKerbal(kerbal).OnVacation;
         }
 
         public static bool IsForcedVacation(this ProtoCrewMember kerbal)
         {
-            return CrewQueueRoster.Instance.GetExtForKerbal(kerbal).ExtremelyFatigued;
+            return CrewRandRRoster.Instance.GetExtForKerbal(kerbal).ExtremelyFatigued;
         }
 
         public static double GetLastMissionEndTime(this ProtoCrewMember kerbal)
         {
-            return CrewQueueRoster.Instance.GetExtForKerbal(kerbal).LastMissionEndTime;
+            return CrewRandRRoster.Instance.GetExtForKerbal(kerbal).LastMissionEndTime;
         }
     }
 }

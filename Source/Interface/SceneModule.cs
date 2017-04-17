@@ -39,7 +39,7 @@ using System.Reflection;
 
 
 
-namespace CrewQueue.Interface
+namespace CrewRandR.Interface
 {
     public abstract class SceneModule : MonoBehaviourExtended
     {
@@ -61,9 +61,9 @@ namespace CrewQueue.Interface
                             partManifest.RemoveCrewFromSeat(partManifest.GetCrewSeat(crewMember));
                         }
                     }
-                    if (CrewQueueSettings.Instance.AssignCrews)
+                    if (CrewRandRSettings.Instance.AssignCrews)
                     {
-                        partManifest.AddCrewToOpenSeats(CrewQueue.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, new List<ProtoCrewMember>(), true));
+                        partManifest.AddCrewToOpenSeats(CrewRandR.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, new List<ProtoCrewMember>(), true));
                     }
                 }
 
@@ -108,7 +108,7 @@ namespace CrewQueue.Interface
             {
                 Logging.Debug("Attempting to fill part - " + partManifest.PartInfo.name);
                 bool vets = (partManifest == manifest.GetCrewableParts()[0]) ? true : false;
-                partManifest.AddCrewToOpenSeats(CrewQueue.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, manifest.GetAllCrew(false), vets));
+                partManifest.AddCrewToOpenSeats(CrewRandR.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, manifest.GetAllCrew(false), vets));
             }
 
             CrewAssignmentDialog.Instance.RefreshCrewLists(manifest, true, true);

@@ -29,20 +29,20 @@ using System.Reflection;
 
 
 
-namespace CrewQueue
+namespace CrewRandR
 {
     [KSPScenario(ScenarioCreationOptions.AddToAllGames, new GameScenes[] { GameScenes.EDITOR, GameScenes.FLIGHT, GameScenes.SPACECENTER, GameScenes.TRACKSTATION })]
-    class CrewQueueSettings : ScenarioModule
+    class CrewRandRSettings : ScenarioModule
     {
         // Singleton boilerplate
-        private static CrewQueueSettings _Instance;
-        internal static CrewQueueSettings Instance
+        private static CrewRandRSettings _Instance;
+        internal static CrewRandRSettings Instance
         {
             get
             {
                 if (_Instance == null)
                 {
-                    throw new Exception("ERROR: Attempted to query CrewQueue.Data before it was loaded.");
+                    throw new Exception("ERROR: Attempted to query CrewRandR.Data before it was loaded.");
                 }
 
                 return _Instance;
@@ -67,11 +67,11 @@ namespace CrewQueue
         [KSPField(isPersistant = true)]
         public int MaximumVacationDays = 28;
 #endif
-        public bool AssignCrews {  get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>().AssignCrews; } }
-        public double VacationScalar { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>().VacationScalar; } }
-        public int MinimumVacationDays { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>().MinimumVacationDays; } }
-        public int MaximumVacationDays { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>().MaximumVacationDays; } }
-        public bool Enabled { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>().enabled; } }
+        public bool AssignCrews {  get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().AssignCrews; } }
+        public double VacationScalar { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().VacationScalar; } }
+        public int MinimumVacationDays { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().MinimumVacationDays; } }
+        public int MaximumVacationDays { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().MaximumVacationDays; } }
+        public bool Enabled { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().enabled; } }
 
         public override void OnAwake()
         {
@@ -86,7 +86,7 @@ namespace CrewQueue
         // ScenarioModule methods
         public override void OnLoad(ConfigNode rootNode)
         {
-            CrewQueueRoster.Instance.Flush();
+            CrewRandRRoster.Instance.Flush();
             if (rootNode.HasNode("CrewList"))
             {
                 rootNode = rootNode.GetNode("CrewList");
@@ -94,7 +94,7 @@ namespace CrewQueue
 
                 foreach (ConfigNode crewNode in crewNodes)
                 {
-                    CrewQueueRoster.Instance.AddExtElement(new CrewQueueRoster.KerbalExtData(crewNode));
+                    CrewRandRRoster.Instance.AddExtElement(new CrewRandRRoster.KerbalExtData(crewNode));
                 }
             }
         }
@@ -104,9 +104,9 @@ namespace CrewQueue
             rootNode.RemoveNode("CrewList");
             ConfigNode crewNodes = new ConfigNode("CrewList");
 
-            foreach (CrewQueueRoster.KerbalExtData crewNode in CrewQueueRoster.Instance.ExtDataSet)
+            foreach (CrewRandRRoster.KerbalExtData crewNode in CrewRandRRoster.Instance.ExtDataSet)
             {
-                bool rosterHidden = (crewNode.ProtoReference.rosterStatus == CrewQueue.ROSTERSTATUS_VACATION);
+                bool rosterHidden = (crewNode.ProtoReference.rosterStatus == CrewRandR.ROSTERSTATUS_VACATION);
 
                 if (rosterHidden)
                 {
@@ -117,7 +117,7 @@ namespace CrewQueue
 
                 if (rosterHidden)
                 {
-                    crewNode.ProtoReference.rosterStatus = CrewQueue.ROSTERSTATUS_VACATION;
+                    crewNode.ProtoReference.rosterStatus = CrewRandR.ROSTERSTATUS_VACATION;
                 }
             }
 
@@ -125,9 +125,9 @@ namespace CrewQueue
         }
     }
 
-    //   HighLogic.CurrentGame.Parameters.CustomParams<CrewQCustomParams>()
+    //   HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>()
 
-    public class CrewQCustomParams : GameParameters.CustomParameterNode
+    public class CrewRandRCustomParams : GameParameters.CustomParameterNode
     {
         public override string Title { get { return ""; } }
         public override GameParameters.GameMode GameMode { get { return GameParameters.GameMode.ANY; } }

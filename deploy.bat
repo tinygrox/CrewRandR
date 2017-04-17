@@ -2,10 +2,10 @@
 set H=R:\KSP_1.2.2_dev
 echo %H%
 
-copy /Y "Source\bin\Debug\CrewQueue.dll" "GameData\CrewQueue\Plugins"
-copy /Y CrewQueue.version GameData\CrewQueue
+copy /Y "Source\bin\Debug\CrewRandR.dll" "GameData\CrewRandR\Plugins"
+copy /Y CrewRandR.version GameData\CrewRandR
 
 cd GameData
-mkdir "%H%\GameData\CrewQueue"
-xcopy /y /s CrewQueue "%H%\GameData\CrewQueue"
+mkdir "%H%\GameData\CrewRandR"
+xcopy /y /s CrewRandR "%H%\GameData\CrewRandR"
 

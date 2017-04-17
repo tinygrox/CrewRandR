@@ -35,14 +35,14 @@ using KSPPluginFramework;
 using KSP.UI;
 using KSP.UI.Screens;
 
-namespace CrewQueue.Interface
+namespace CrewRandR.Interface
 {
     [KSPAddon(KSPAddon.Startup.EveryScene,true)]
     class AppLauncher : ProtoAppLauncher
     {        
         public override Texture AppLauncherIcon
         {
-            get { return GameDatabase.Instance.GetTexture("CrewQueue/Icons/appLauncher", false); }
+            get { return GameDatabase.Instance.GetTexture("CrewRandR/Icons/appLauncher", false); }
         }
 
         public override ApplicationLauncher.AppScenes Visibility
@@ -54,7 +54,7 @@ namespace CrewQueue.Interface
                     return ApplicationLauncher.AppScenes.NEVER;
 #if false
                     bool coalescedCondition = (settingsWindow != null) &&
-                                              (CrewQueueSettings.Instance.HideSettingsIcon == false || settingsWindow.Visible == true);
+                                              (CrewRandRSettings.Instance.HideSettingsIcon == false || settingsWindow.Visible == true);
 
                     return coalescedCondition ? ApplicationLauncher.AppScenes.SPACECENTER : ApplicationLauncher.AppScenes.NEVER;
 #endif

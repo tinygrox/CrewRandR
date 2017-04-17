@@ -32,23 +32,23 @@ using KSPPluginFramework;
 using FingerboxLib;
 
 // Start reading here!
-namespace CrewQueue
+namespace CrewRandR
 {
     [KSPAddon(KSPAddon.Startup.SpaceCentre, true)]
-    public class CrewQueue : MonoBehaviourExtended
+    public class CrewRandR : MonoBehaviourExtended
     {
         // ITS OVER NINE THOUSAND!!!!111
         internal const ProtoCrewMember.RosterStatus ROSTERSTATUS_VACATION = (ProtoCrewMember.RosterStatus)9001;
 
         // Singleton boilerplate
-        private static CrewQueue _Instance;
-        public static CrewQueue Instance
+        private static CrewRandR _Instance;
+        public static CrewRandR Instance
         {
             get
             {
                 if (_Instance == null)
                 {
-                    throw new Exception("ERROR: Attempted to access CrewQueue before it was loaded");
+                    throw new Exception("ERROR: Attempted to access CrewRandR before it was loaded");
                 }
                 return _Instance;
             }
@@ -74,13 +74,13 @@ namespace CrewQueue
 
         void OnLevelWasLoaded(GameScenes scene)
         {
-            CrewQueueRoster.RestoreVacationingCrew();
+            CrewRandRRoster.RestoreVacationingCrew();
         }
 
         internal IEnumerable<ProtoCrewMember> GetCrewForPart(Part partPrefab, IEnumerable<ProtoCrewMember> exemptList, bool preferVeterans = false)
         {
             IList<ProtoCrewMember> partCrew = new List<ProtoCrewMember>();
-            IEnumerable<ProtoCrewMember> availableCrew = (preferVeterans ? CrewQueueRoster.Instance.MostExperiencedCrew : CrewQueueRoster.Instance.AvailableCrew).Except(exemptList);
+            IEnumerable<ProtoCrewMember> availableCrew = (preferVeterans ? CrewRandRRoster.Instance.MostExperiencedCrew : CrewRandRRoster.Instance.AvailableCrew).Except(exemptList);
             string[] crewCompositionStrings;
             int numToSelect = partPrefab.CrewCapacity;
             Dictionary<string, IEnumerable<ProtoCrewMember>> crewComposition = new Dictionary<string, IEnumerable<ProtoCrewMember>>();
@@ -93,9 +93,9 @@ namespace CrewQueue
             Logging.Debug("Part: " + partPrefab.partInfo.name + "   Selecting " + numToSelect + " crew members");
 
             //Get Crew Composition
-            if (partPrefab.Modules.OfType<ModuleCrewQ>().Any())
+            if (partPrefab.Modules.OfType<ModuleCrewRandR>().Any())
             {
-                crewCompositionStrings = partPrefab.Modules["ModuleCrewQ"].Fields.GetValue<string>("crewComposition").Split(',').Select(x => x.Trim()).ToArray();
+                crewCompositionStrings = partPrefab.Modules["ModuleCrewRandR"].Fields.GetValue<string>("crewComposition").Split(',').Select(x => x.Trim()).ToArray();
             }
             else
             {
@@ -163,7 +163,7 @@ namespace CrewQueue
         }             
     }
 
-    public class ModuleCrewQ : PartModule
+    public class ModuleCrewRandR : PartModule
     {
         [KSPField]
         public string crewComposition;

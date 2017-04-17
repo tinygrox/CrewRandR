@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CrewQueue
+namespace CrewRandR
 {
-    class CrewQueueProxy
+    class CrewRandRProxy
     {
         public static IEnumerable<ProtoCrewMember> AvailableCrew
         {
             get
             {
-                return CrewQueueRoster.Instance.AvailableCrew;
+                return CrewRandRRoster.Instance.AvailableCrew;
             }
         }
 
@@ -19,7 +19,7 @@ namespace CrewQueue
         {
             get
             {
-                return CrewQueueRoster.Instance.UnavailableCrew;
+                return CrewRandRRoster.Instance.UnavailableCrew;
             }
         }
 
@@ -27,7 +27,7 @@ namespace CrewQueue
         {
             get
             {
-                return CrewQueueRoster.Instance.LeastExperiencedCrew;
+                return CrewRandRRoster.Instance.LeastExperiencedCrew;
             }
         }
 
@@ -35,13 +35,13 @@ namespace CrewQueue
         {
             get
             {
-                return CrewQueueRoster.Instance.MostExperiencedCrew;
+                return CrewRandRRoster.Instance.MostExperiencedCrew;
             }
         }
 
         public static IEnumerable<ProtoCrewMember> GetCrewForPart(Part partPrefab, IEnumerable<ProtoCrewMember> exemptList, bool preferVeterans = false)
         {
-            return CrewQueue.Instance.GetCrewForPart(partPrefab, exemptList, preferVeterans);
+            return CrewRandR.Instance.GetCrewForPart(partPrefab, exemptList, preferVeterans);
         }
     }
 }

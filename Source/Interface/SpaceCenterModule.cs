@@ -33,7 +33,7 @@ using KSP.UI;
 using KSP.UI.Screens;
 using FingerboxLib;
 
-namespace CrewQueue.Interface
+namespace CrewRandR.Interface
 {
     [KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
     class SpaceCenterModule : SceneModule
@@ -89,12 +89,12 @@ namespace CrewQueue.Interface
 
         private void onGUILaunchScreenSpawn(GameEvents.VesselSpawnInfo info)
         {
-            CrewQueueRoster.HideVacationingCrew();
+            CrewRandRRoster.HideVacationingCrew();
         }
 
         private void onGUILaunchScreenDespawn()
         {
-            CrewQueueRoster.RestoreVacationingCrew();
+            CrewRandRRoster.RestoreVacationingCrew();
         }
 
         private void onVesselSelected(ShipTemplate shipTemplate)

@@ -6,3 +6,5 @@
 		Fixed syntax error in MM cfg file
 		Fixed endless loop when no good crew are available
 		Cleaned up some log spam
+1.1.0.2
+		Renamed mod to Crew R&R, renamed everything to match, including directory

@@ -1,9 +1,9 @@
 
 rem @echo off
 
-copy /Y "Source\bin\Release\CrewQueue.dll" "GameData\CrewQueue\Plugins"
+copy /Y "Source\bin\Release\CrewRandR.dll" "GameData\CrewRandR\Plugins"
 
-copy /Y CrewQueue.version GameData\CrewQueue
+copy /Y CrewRandR.version GameData\CrewRandR
 
 
 set DEFHOMEDRIVE=d:
@@ -30,7 +30,7 @@ set HOMEDRIVE=%HOMEDIR:~0,2%
 
 
 
-set VERSIONFILE=CrewQueue.version
+set VERSIONFILE=CrewRandR.version
 rem The following requires the JQ program, available here: https://stedolan.github.io/jq/download/
 c:\local\jq-win64  ".VERSION.MAJOR" %VERSIONFILE% >tmpfile
 set /P major=<tmpfile
@@ -49,12 +49,12 @@ if "%build%" NEQ "0"  set VERSION=%VERSION%.%build%
 echo %VERSION%
 pause
 
-copy LICENSE.txt GameData\CrewQueue
+copy LICENSE.txt GameData\CrewRandR
 
-copy /Y README.md GameData\CrewQueue
+copy /Y README.md GameData\CrewRandR
 
 
-set FILE="%RELEASEDIR%\CrewQueue-%VERSION%.zip"
+set FILE="%RELEASEDIR%\CrewRandR-%VERSION%.zip"
 IF EXIST %FILE% del /F %FILE%
 %ZIP% a -tzip %FILE% GameData
 
