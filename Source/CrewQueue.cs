@@ -28,6 +28,7 @@ using System.Text;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using KSPPluginFramework;
 using FingerboxLib;
 
@@ -58,9 +59,9 @@ namespace CrewRandR
         protected override void Awake()
         {
             DontDestroyOnLoad(this);
-            _Instance = this;            
+            _Instance = this;
             GameEvents.OnVesselRecoveryRequested.Add(OnVesselRecoveryRequested);
-            GameEvents.onLevelWasLoaded.Add(OnLevelWasLoaded);
+            // GameEvents.onLevelWasLoaded.Add(OnLevelWasLoaded);
         }
 
         // KSP Events
@@ -72,7 +73,21 @@ namespace CrewRandR
             }
         }
 
-        void OnLevelWasLoaded(GameScenes scene)
+
+
+        void OnEnable()
+        {
+            //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
+            SceneManager.sceneLoaded += OnLevelFinishedLoading;
+        }
+
+        void OnDisable()
+        {
+            //Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled. Remember to always have an unsubscription for every delegate you subscribe to!
+            SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+        }
+
+        void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
         {
             CrewRandRRoster.RestoreVacationingCrew();
         }
@@ -84,7 +99,7 @@ namespace CrewRandR
             string[] crewCompositionStrings;
             int numToSelect = partPrefab.CrewCapacity;
             Dictionary<string, IEnumerable<ProtoCrewMember>> crewComposition = new Dictionary<string, IEnumerable<ProtoCrewMember>>();
-            
+
             foreach (ProtoCrewMember crew in availableCrew)
             {
                 Logging.Debug(" + " + crew.name);
@@ -102,7 +117,7 @@ namespace CrewRandR
                 crewCompositionStrings = new string[] { "Pilot", "Engineer", "Scientist", "Tourist" };
             }
 
-            Logging.Debug("Using Composition String ... \"" + string.Join(",",crewCompositionStrings) + "\"");
+            Logging.Debug("Using Composition String ... \"" + string.Join(",", crewCompositionStrings) + "\"");
 
             foreach (string element in crewCompositionStrings)
             {
@@ -152,7 +167,7 @@ namespace CrewRandR
                     i--;
                 }
             }
- 
+
             Logging.Debug("Listing Candidates...");
             foreach (ProtoCrewMember crew in partCrew)
             {
@@ -160,7 +175,7 @@ namespace CrewRandR
             }
 
             return partCrew;
-        }             
+        }
     }
 
     public class ModuleCrewRandR : PartModule

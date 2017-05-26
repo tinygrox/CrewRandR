@@ -38,13 +38,15 @@ namespace CrewRandR
         private static CrewRandRSettings _Instance;
         internal static CrewRandRSettings Instance
         {
+
             get
             {
+#if false
                 if (_Instance == null)
                 {
                     throw new Exception("ERROR: Attempted to query CrewRandR.Data before it was loaded.");
                 }
-
+#endif
                 return _Instance;
             }
         }
@@ -131,7 +133,8 @@ namespace CrewRandR
     {
         public override string Title { get { return ""; } }
         public override GameParameters.GameMode GameMode { get { return GameParameters.GameMode.ANY; } }
-        public override string Section { get { return "Crew Queue"; } }
+        public override string Section { get { return "Crew R&R"; } }
+        public override string DisplaySection { get { return "Crew R&R"; } }
         public override int SectionOrder { get { return 1; } }
         public override bool HasPresets { get { return true; } }
 
