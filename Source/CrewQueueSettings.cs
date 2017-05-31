@@ -70,7 +70,7 @@ namespace CrewRandR
         public int MaximumVacationDays = 28;
 #endif
         public bool AssignCrews {  get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().AssignCrews; } }
-        public double VacationScalar { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().VacationScalar; } }
+        public double VacationScalar { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().vacationScalar; } }
         public int MinimumVacationDays { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().MinimumVacationDays; } }
         public int MaximumVacationDays { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().MaximumVacationDays; } }
         public bool Enabled { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().enabled; } }
