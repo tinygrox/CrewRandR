@@ -50,30 +50,37 @@ namespace CrewRandR.Interface
             GameEvents.onGUILaunchScreenDespawn.Add(onGUILaunchScreenDespawn);
         }
 
-        protected override void Update()
+        // No need to update more than once a second here
+        private float lastUpdated = 0f;
+        private const float UPDATE_THRESHOLD = 1f; // UI update period in seconds
+
+        protected override void LateUpdate()
         {
             if (astronautComplexSpawned)
             {
-                Logging.Debug("AC is spawned...");
-
-                AstronautComplex ac = GameObject.FindObjectOfType<AstronautComplex>();
-                if (ac)
+                if (lastUpdated + UPDATE_THRESHOLD <= Time.realtimeSinceStartup)
                 {
-                    foreach (var s in ac.ScrollListAvailable)
+                    Logging.Debug("AC is spawned...");
+                    lastUpdated = Time.realtimeSinceStartup;
+                    AstronautComplex ac = GameObject.FindObjectOfType<AstronautComplex>();
+                    if (ac)
                     {
-                        Logging.Info("");
-                        IEnumerable<CrewListItem> crewItemContainers = GameObject.FindObjectsOfType<CrewListItem>().Where(x => x.GetCrewRef().rosterStatus == ProtoCrewMember.RosterStatus.Available);
-                        foreach (CrewListItem crewContainer in crewItemContainers)
+                        foreach (var s in ac.ScrollListAvailable)
                         {
-                            if (crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime() > 0)
+                            Logging.Info("");
+                            IEnumerable<CrewListItem> crewItemContainers = GameObject.FindObjectsOfType<CrewListItem>().Where(x => x.GetCrewRef().rosterStatus == ProtoCrewMember.RosterStatus.Available);
+                            foreach (CrewListItem crewContainer in crewItemContainers)
                             {
-                                Logging.Debug("relabeling: " + crewContainer.GetName());
-                                string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime());
-                                crewContainer.SetLabel(label);
+                                if (crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime() > 0)
+                                {
+                                    Logging.Debug("relabeling: " + crewContainer.GetName());
+                                    string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime());
+                                    crewContainer.SetLabel(label);
+                                }
                             }
                         }
                     }
-                }                
+                }
             }
         }
 
