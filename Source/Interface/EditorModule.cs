@@ -46,7 +46,13 @@ namespace CrewRandR.Interface
             GameEvents.onEditorShipModified.Add(OnEditorShipModified);
             GameEvents.onEditorScreenChange.Add(OnEditorScreenChanged);
         }
-
+#if false
+        protected override void OnDestroy()
+        {
+            CrewRandRRoster.RestoreVacationingCrew();
+            base.OnDestroy();
+        }
+#endif
         // KSP Events
         protected void OnEditorShipModified(ShipConstruct ship)
         {

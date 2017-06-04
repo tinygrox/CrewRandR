@@ -133,6 +133,7 @@ namespace CrewRandR
 
         public static void HideVacationingCrew()
         {
+            Logging.Info("HideVacationCrew");
             foreach (ProtoCrewMember kerbal in CrewRandRRoster.Instance.UnavailableCrew.Where(k => k.rosterStatus == ProtoCrewMember.RosterStatus.Available))
             {
                 kerbal.rosterStatus = CrewRandR.ROSTERSTATUS_VACATION;
@@ -142,6 +143,7 @@ namespace CrewRandR
 
         public static void RestoreVacationingCrew()
         {
+            Logging.Info("RestoreVacationingCrew");
             if (HighLogic.CurrentGame == null || HighLogic.CurrentGame.CrewRoster == null || HighLogic.CurrentGame.CrewRoster.Crew == null)
                 return;
             
@@ -149,6 +151,7 @@ namespace CrewRandR
 
             foreach (ProtoCrewMember kerbal in HighLogic.CurrentGame.CrewRoster.Crew.Where(k => k.rosterStatus == CrewRandR.ROSTERSTATUS_VACATION))
             {
+                Logging.Info("Crew on vacation: " + kerbal.nameWithGender);
                 kerbal.rosterStatus = ProtoCrewMember.RosterStatus.Available;
             }
             
@@ -157,6 +160,7 @@ namespace CrewRandR
                 Logging.Info("CrewAssignmentDialog.Instance is null");
                 return;
             }
+            Logging.Info("CrewAssignmentDialog.Instance.RefreshCrewLists");
             CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, true);
         }
 

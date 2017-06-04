@@ -40,6 +40,12 @@ namespace CrewRandR.Interface
     {
         private bool astronautComplexSpawned;
 
+        private void Start()
+        {
+            Logging.Info("SpaceCenterModule.Start");
+            CrewRandRRoster.RestoreVacationingCrew();
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -48,18 +54,25 @@ namespace CrewRandR.Interface
             GameEvents.onGUIAstronautComplexDespawn.Add(onGUIAstronautComplexDespawn);
             GameEvents.onGUILaunchScreenSpawn.Add(onGUILaunchScreenSpawn);
             GameEvents.onGUILaunchScreenDespawn.Add(onGUILaunchScreenDespawn);
+            lastUpdated = MAX_UPDATE_THRESHOLD + Time.realtimeSinceStartup + 1;
+            updateThreshold = 0;
         }
 
-        // No need to update more than once a second here
+        // No need to update more than once every few seconds here
         private float lastUpdated = 0f;
-        private const float UPDATE_THRESHOLD = 1f; // UI update period in seconds
+        private float updateThreshold = 0f;
+        private const float MAX_UPDATE_THRESHOLD = 5f; // UI update period in seconds
 
         protected override void LateUpdate()
         {
             if (astronautComplexSpawned)
             {
-                if (lastUpdated + UPDATE_THRESHOLD <= Time.realtimeSinceStartup)
+                if (lastUpdated + updateThreshold <= Time.realtimeSinceStartup)
                 {
+                    // This is so that it will update quickly when first entering, but then will be delayed to reduce lag
+                    if (updateThreshold < MAX_UPDATE_THRESHOLD)
+                        updateThreshold += 0.1f;
+
                     Logging.Debug("AC is spawned...");
                     lastUpdated = Time.realtimeSinceStartup;
                     AstronautComplex ac = GameObject.FindObjectOfType<AstronautComplex>();
