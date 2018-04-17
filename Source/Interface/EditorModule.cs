@@ -29,6 +29,8 @@ using System.Text;
 using System.Reflection;
 
 using UnityEngine;
+using KSP.UI;
+using KSP.UI.Screens;
 using KSPPluginFramework;
 using FingerboxLib;
 
@@ -37,13 +39,15 @@ namespace CrewRandR.Interface
     [KSPAddon(KSPAddon.Startup.EditorAny, false)]
     class EditorModule : SceneModule
     {
-        bool rootExists, cleanedRoot;
+        bool manifestNeedsCleaning = false;
 
         // Monobehaviour Methods
         protected override void Awake()
         {
             base.Awake();
-            GameEvents.onEditorShipModified.Add(OnEditorShipModified);
+            GameEvents.onEditorStarted.Add(OnEditorStarted);
+            GameEvents.onEditorPodPicked.Add(OnEditorPodPicked);
+            GameEvents.onEditorLoad.Add(OnEditorLoad);
             GameEvents.onEditorScreenChange.Add(OnEditorScreenChanged);
         }
 #if false
@@ -54,9 +58,30 @@ namespace CrewRandR.Interface
         }
 #endif
         // KSP Events
-        protected void OnEditorShipModified(ShipConstruct ship)
+        protected void OnEditorStarted()
         {
-            rootExists = CheckRoot(ship);                       
+            // If there's a ship design left over from a previous editor
+            // session, it may have assigned crew who are now on vacation.
+            if (CrewAssignmentDialog.Instance?.GetManifest() != null)
+            {
+                manifestNeedsCleaning = true;
+            }
+        }
+
+        protected void OnEditorPodPicked(Part part)
+        {
+            // There's now a root part, and it needs to be cleaned.
+            manifestNeedsCleaning = true;
+        }
+
+        protected void OnEditorLoad(ShipConstruct ship, CraftBrowserDialog.LoadType loadType)
+        {
+            if (loadType == CraftBrowserDialog.LoadType.Normal)
+            {
+                // Loading a new ship design replaces the root part, and the new
+                // root hasn't been cleaned even if the old one had been.
+                manifestNeedsCleaning = true;
+            }
         }
 
         protected void OnEditorScreenChanged(EditorScreen screen)
@@ -75,31 +100,19 @@ namespace CrewRandR.Interface
         // Our methods
         protected override void Update()
         {
-            if (CrewRandRSettings.Instance != null && CrewRandRSettings.Instance.AssignCrews)
+            try
             {
-                try
+                if (manifestNeedsCleaning)
                 {
-                    if (rootExists && !cleanedRoot)
-                    {
-                        CleanManifest();
-                        cleanedRoot = true;
-                    }
-                    else if (!rootExists && cleanedRoot)
-                    {
-                        cleanedRoot = false;
-                    }
-                }
-                catch (Exception)
-                {
-                    // No worries!
-                    Logging.Debug("If there is a problem with clearing the roster, look here.");
+                    CleanManifest();
+                    manifestNeedsCleaning = false;
                 }
             }
-        }
-
-        protected bool CheckRoot(ShipConstruct ship)
-        {
-            return (ship != null) && (ship.Count > 0);
+            catch (Exception)
+            {
+                // No worries!
+                Logging.Debug("If there is a problem with clearing the roster, look here.");
+            }
         }
     }
 }
