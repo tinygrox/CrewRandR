@@ -69,7 +69,7 @@ namespace CrewRandR
         {
             foreach (ProtoCrewMember kerbal in vessel.GetVesselCrew())
             {
-                kerbal.SetLastMissionData(vessel.missionTime, Planetarium.GetUniversalTime());
+                kerbal.SetMissionFinished(Planetarium.GetUniversalTime());
             }
         }
 

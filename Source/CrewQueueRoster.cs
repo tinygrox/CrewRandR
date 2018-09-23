@@ -182,6 +182,9 @@ namespace CrewRandR
             // This will be true if the Kerbal has been sent on a mission while already on vacation.
             public bool ExtremelyFatigued = false;
 
+            // Returns the start time of the current mission
+            public double CurrentMissionStartTime = -1;
+
             // Returns the duration of the last mission
             public double LastMissionDuration = -1;
             public double LastMissionEndTime = -1;
@@ -240,6 +243,7 @@ namespace CrewRandR
                     ConfigNode _thisNode = new ConfigNode("KERBAL");
 
                     _thisNode.AddValue("Name", Name);
+                    _thisNode.AddValue("CurrentMissionStartTime", CurrentMissionStartTime);
                     _thisNode.AddValue("GetLastMissionDuration", LastMissionDuration);
                     _thisNode.AddValue("LastMissionEndTime", LastMissionEndTime);
                     _thisNode.AddValue("ExtremelyFatigued", ExtremelyFatigued);
@@ -259,6 +263,15 @@ namespace CrewRandR
                 LastMissionDuration = Convert.ToDouble(configNode.GetValue("GetLastMissionDuration"));
                 LastMissionEndTime = Convert.ToDouble(configNode.GetValue("LastMissionEndTime"));
                 ExtremelyFatigued = Convert.ToBoolean(configNode.GetValue("ExtremelyFatigued"));
+
+                if (configNode.HasValue("CurrentMissionStartTime"))
+                {
+                    CurrentMissionStartTime = Convert.ToDouble(configNode.GetValue("CurrentMissionStartTime"));
+                }
+                else
+                {
+                    CurrentMissionStartTime = -1;  // Kerbal is not on a mission
+                }
             }
 
             public override bool Equals(object obj)
@@ -287,11 +300,64 @@ namespace CrewRandR
 
     public static class RosterExtensions
     {
-        public static void SetLastMissionData(this ProtoCrewMember kerbal, double newMissionDuration, double currentTime)
+        public static void SetOnMission(this ProtoCrewMember kerbal, double currentTime)
         {
-            Logging.Debug("RosterExtensions.SetLastMissionData");
-            CrewRandRRoster.Instance.GetExtForKerbal(kerbal).LastMissionDuration = newMissionDuration;
-            CrewRandRRoster.Instance.GetExtForKerbal(kerbal).LastMissionEndTime = currentTime;
+            var kerbalExt = CrewRandRRoster.Instance.GetExtForKerbal(kerbal);
+
+            // Ignore ineligible kerbals, to avoid logging bogus messages about
+            // tourists starting missions.  (Since their data doesn't get saved,
+            // they'd be forgotten and re-detected at every entry to the flight
+            // scene.)
+            if (!kerbalExt.EligibleForVacation) return;
+
+            // This can be called multiple times during the mission, but we want
+            // to know when the mission began, so only store the time if the
+            // kerbal wasn't on a mission before now.
+            if (kerbalExt.CurrentMissionStartTime <= -1)
+            {
+                Logging.Info("Started mission for " + kerbal.name + " at UT " + currentTime);
+
+                kerbalExt.CurrentMissionStartTime = currentTime;
+            }
+        }
+
+        public static void SetMissionFinished(this ProtoCrewMember kerbal, double currentTime)
+        {
+            var kerbalExt = CrewRandRRoster.Instance.GetExtForKerbal(kerbal);
+
+            // Ignore ineligible kerbals, to avoid logging bogus messages about
+            // tourists finishing missions.  (Since their data doesn't get
+            // saved, they have no start time so they'd always get the zero
+            // duration fallback, but they don't go on vacation anyway.)
+            if (!kerbalExt.EligibleForVacation) return;
+
+            Logging.Info("Finished mission for " + kerbal.name + " at UT " + currentTime);
+
+            // If no mission-start time was tracked for this kerbal, use the
+            // current time as a fallback, so that the duration is zero.  This
+            // should only in rare situations (e.g. the vessel has been on
+            // Kerbin since before this mod was installed, and was recovered
+            // directly from the tracking station, without entering flight.)
+            // The kerbal will get the minimum vacation time, which is
+            // reasonble since there's no way to determine how long it should
+            // really be.
+            if (kerbalExt.CurrentMissionStartTime <= -1)
+            {
+                Logging.Debug("No mission start time recorded; using zero duation as fallback");
+
+                kerbalExt.CurrentMissionStartTime = currentTime;
+            }
+
+            kerbalExt.LastMissionEndTime = currentTime;
+            kerbalExt.LastMissionDuration = currentTime - kerbalExt.CurrentMissionStartTime;
+            kerbalExt.CurrentMissionStartTime = -1;  // Mission has ended; "current" is now "last"
+
+            Logging.Debug("Mission duration was " + Utilities.GetFormattedTime(kerbalExt.LastMissionDuration));
+        }
+
+        public static double GetCurrentMissionStartTime(this ProtoCrewMember kerbal)
+        {
+            return CrewRandRRoster.Instance.GetExtForKerbal(kerbal).CurrentMissionStartTime;
         }
 
         public static double GetLastMissionDuration(this ProtoCrewMember kerbal)
