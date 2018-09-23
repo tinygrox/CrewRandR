@@ -59,7 +59,7 @@ namespace CrewRandR
         {
             get
             {
-                return _ExtDataSet.Where(x => x.ProtoReference != null);
+                return _ExtDataSet.Where(x => x.EligibleForVacation);
             }
         }
 
@@ -211,6 +211,16 @@ namespace CrewRandR
                 get
                 {
                     return VacationExpiry > Planetarium.GetUniversalTime() ? true : false;
+                }
+            }
+
+            public bool EligibleForVacation
+            {
+                get
+                {
+                    // Some kerbals (e.g. tourists) aren't considered crew, and
+                    // should be exempt from all CrewRandR handling.
+                    return ProtoReference != null;
                 }
             }
 
