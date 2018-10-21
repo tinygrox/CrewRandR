@@ -1,3 +1,6 @@
+1.1.8.1
+	Version bump for 1.5 rebuild
+
 1.1.8
 	Thanks to @Wyzard for the following bug fixes:
 		Fixed kerbals not going on vacation if recovered from the tracking station or space center scenes.
