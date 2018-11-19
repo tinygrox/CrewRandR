@@ -78,11 +78,15 @@ namespace CrewRandR
         public override void OnAwake()
         {
             _Instance = this;
+
+            GameEvents.onFlightReady.Add(onFlightReady);
         }
 
         void Destroy()
         {
             _Instance = null;
+
+            GameEvents.onFlightReady.Remove(onFlightReady);
         }
 
         // ScenarioModule methods
@@ -124,6 +128,36 @@ namespace CrewRandR
             }
 
             rootNode.AddNode(crewNodes);
+        }
+
+        private void onFlightReady()
+        {
+            // All kerbals who are in vessels are on missions.
+
+            // In general we're just interested in the crew of a new vessel
+            // being placed on a launchpad, since every mission starts there,
+            // but there doesn't seem to be an event that actually provides the
+            // crew of such a vessel.  (OnVesselRollout is ideal in principle,
+            // but it doesn't provide a crew list.  OnVesselCreate seems
+            // promising, but a new vessel's crew list is empty when that fires.
+            // Other OnVessel* events have similar problems.)  So instead, we
+            // just look at *all* the vessels when they're all ready.  This
+            // isn't too costly since it only happens once, and it ensures that
+            // nothing gets missed.
+
+            // In particular, this also finds crew in vessels that were launched
+            // before this mod was installed (or using an old version that
+            // didn't track kerbals' mission time in this way).  In those cases,
+            // there's no way to know when the kerbal's mission actually began,
+            // but the current time is a reasonable fallback.
+
+            foreach (Vessel vessel in FlightGlobals.Vessels)
+            {
+                foreach (ProtoCrewMember kerbal in vessel.GetVesselCrew())
+                {
+                    kerbal.SetOnMission(Planetarium.GetUniversalTime());
+                }
+            }
         }
     }
 
