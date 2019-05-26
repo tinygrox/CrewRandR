@@ -37,9 +37,8 @@ namespace CrewRandR.Interface
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     class FlightModule : SceneModule
     {
-        private new void Start()
+        private void Start()
         {
-            base.Start();
             Logging.Info("FlightModule.Start");
             CrewRandRRoster.RestoreVacationingCrew();
         }
