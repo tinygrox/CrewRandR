@@ -1,3 +1,8 @@
+1.1.9.2 (unreleased)
+	Removed FOR from MM patch
+	Fixed hiding message in Flight module
+	Added some debug dump when crew is not put into pod
+
 1.1.9
 	Thanks to github user Wyzard256:
 		Track mission time by kerbal, not by vessel 

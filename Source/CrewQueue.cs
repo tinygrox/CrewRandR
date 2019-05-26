@@ -173,7 +173,18 @@ namespace CrewRandR
             {
                 Logging.Debug("Candidate: " + crew.name);
             }
+            if (partCrew.Count == 0)
+            {
+                foreach (ProtoCrewMember crew in availableCrew)
+                {
+                    Logging.Error(" + " + crew.name);
+                }
 
+                Logging.Error("Part: " + partPrefab.partInfo.name + "   Selecting " + numToSelect + " crew members");
+
+                foreach (var s in crewCompositionStrings)
+                    Logging.Error("crewComposition: " + s);
+            }
             return partCrew;
         }
     }

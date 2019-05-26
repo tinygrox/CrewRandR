@@ -113,6 +113,7 @@ namespace CrewRandR.Interface
             {
                 Logging.Debug("Attempting to fill part - " + partManifest.PartInfo.name);
                 bool vets = (partManifest == manifest.GetCrewableParts()[0]) ? true : false;
+                Logging.Debug("vets: " + vets);
                 partManifest.AddCrewToOpenSeats(CrewRandR.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, manifest.GetAllCrew(false), vets));
             }
 
