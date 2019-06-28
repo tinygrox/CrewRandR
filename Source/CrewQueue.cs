@@ -39,7 +39,7 @@ namespace CrewRandR
     public class CrewRandR : MonoBehaviourExtended
     {
         // ITS OVER NINE THOUSAND!!!!111
-        internal const ProtoCrewMember.RosterStatus ROSTERSTATUS_VACATION = (ProtoCrewMember.RosterStatus)9001;
+        public const ProtoCrewMember.RosterStatus ROSTERSTATUS_VACATION = (ProtoCrewMember.RosterStatus)9001;
 
         // Singleton boilerplate
         private static CrewRandR _Instance;
