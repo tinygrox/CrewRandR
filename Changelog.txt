@@ -1,3 +1,8 @@
+1.1.10
+	Added InstallChecker
+	Changed some obsolete lines to use new names
+	Rebuild for 1.8
+
 1.1.9.2
 	Made ROSTERSTATUS_VACATION a public, so it's usable by other mods
 	Updated AssemblyVersion.tt to allow for location independent builds
