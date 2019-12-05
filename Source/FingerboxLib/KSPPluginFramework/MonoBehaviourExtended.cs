@@ -74,7 +74,7 @@ namespace KSPPluginFramework
         //}
         static MonoBehaviourExtended()
         {
-            UnityEngine.Random.InitState((int)(DateTime.Now - DateTime.Now.Date).TotalSeconds);
+            //UnityEngine.Random.InitState((int)(DateTime.Now - DateTime.Now.Date).TotalSeconds);
         }
         #endregion
 
@@ -284,6 +284,7 @@ namespace KSPPluginFramework
         protected virtual void Awake()
         {
             LogFormatted_DebugOnly("New MBExtended Awakened");
+            UnityEngine.Random.InitState((int)(DateTime.Now - DateTime.Now.Date).TotalSeconds);
         }
 
         /// <summary>

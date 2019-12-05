@@ -1,5 +1,8 @@
 ChangeLog
 
+1.1.10.4
+	Fixed MonoBahaviourExtended initialization, put UnityEngine.Random.InitState into Awake() method
+
 1.1.10.3
 	Really did the MiniAVC update
 
