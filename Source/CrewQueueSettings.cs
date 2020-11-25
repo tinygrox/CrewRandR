@@ -73,6 +73,14 @@ namespace CrewRandR
         public double VacationScalar { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().vacationScalar; } }
         public int MinimumVacationDays { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().MinimumVacationDays; } }
         public int MaximumVacationDays { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().MaximumVacationDays; } }
+
+
+        public int MinimumVacationHours { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().MinimumVacationHours; } }
+        public int MaximumVacationHours { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().MaximumVacationHours; } }
+
+        public double ShortMissionMaxLength { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().ShortMissionMaxLength; } }
+
+
         public bool Enabled { get { return HighLogic.CurrentGame.Parameters.CustomParams<CrewRandRCustomParams>().enabled; } }
 
         public override void OnAwake()
@@ -179,6 +187,21 @@ namespace CrewRandR
 #endif
         public bool enabled = true;
 
+        [GameParameters.CustomIntParameterUI("Max Short Mission Length (hours)", minValue = 1, maxValue = 24,
+    toolTip = "Max time to be considered a 'short' mission")]
+        public int ShortMissionMaxLength = 4;
+
+
+        [GameParameters.CustomIntParameterUI("Minimum vacation hours for Short mission", minValue = 1, maxValue = 24,
+            toolTip = "Minimum time for vacation for a short mission, overrides the calculated vacation")]
+        public int MinimumVacationHours = 1;
+
+
+        [GameParameters.CustomIntParameterUI("Maximum vacation hours for Short mission", minValue = 1, maxValue = 24,
+            toolTip = "Maximum time for vacation for a short mission, overrides the calculated vacation")]
+        public int MaximumVacationHours = 6;
+
+
 
         [GameParameters.CustomParameterUI("Automatically select crew?")]
         public bool AssignCrews = true;
@@ -221,6 +244,11 @@ namespace CrewRandR
         {
             if (MinimumVacationDays > MaximumVacationDays)
                 MaximumVacationDays = MinimumVacationDays;
+
+            if (MinimumVacationHours > MaximumVacationHours)
+                MaximumVacationHours = MinimumVacationHours;
+
+
             return true;
         }
         public override IList ValidValues(MemberInfo member)

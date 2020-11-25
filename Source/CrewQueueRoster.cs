@@ -102,7 +102,7 @@ namespace CrewRandR
             // Set only allows non-unique elements, so just try to add it anyway
             _ExtDataSet.Add(new KerbalExtData(kerbal));
 
-            // Now find the element
+            // Now find the element.)
             foreach (KerbalExtData data in _ExtDataSet)
             {
                 if (data.Name == kerbal)
@@ -195,11 +195,22 @@ namespace CrewRandR
                 {
                     if (CrewRandRSettings.Instance != null && LastMissionDuration > -1 && LastMissionEndTime > -1)
                     {
-                        double VacationScalar = CrewRandRSettings.Instance.VacationScalar;
-                        double MinimumVacationDays = CrewRandRSettings.Instance.MinimumVacationDays * Utilities.GetDayLength;
-                        double MaximumVacationDays = CrewRandRSettings.Instance.MaximumVacationDays * Utilities.GetDayLength;
-                        double Expiry = LastMissionEndTime + (LastMissionDuration * VacationScalar).Clamp(MinimumVacationDays, MaximumVacationDays);
-                        
+                        double Expiry;
+                        if (LastMissionDuration < CrewRandRSettings.Instance.ShortMissionMaxLength * 3600)
+                        {
+                            double VacationScalar = CrewRandRSettings.Instance.VacationScalar;
+                            double MinimumVacationHours = CrewRandRSettings.Instance.MinimumVacationHours * 3600;
+                            double MaximumVacationHours = CrewRandRSettings.Instance.MaximumVacationHours * 3600;
+                            Expiry = LastMissionEndTime + (LastMissionDuration * VacationScalar).Clamp(MinimumVacationHours, MaximumVacationHours);
+
+                        }
+                        else
+                        {
+                            double VacationScalar = CrewRandRSettings.Instance.VacationScalar;
+                            double MinimumVacationDays = CrewRandRSettings.Instance.MinimumVacationDays * Utilities.GetDayLength;
+                            double MaximumVacationDays = CrewRandRSettings.Instance.MaximumVacationDays * Utilities.GetDayLength;
+                            Expiry = LastMissionEndTime + (LastMissionDuration * VacationScalar).Clamp(MinimumVacationDays, MaximumVacationDays);
+                        }
                         return Expiry;
                     }
                     else
@@ -323,7 +334,7 @@ namespace CrewRandR
 
         public static void SetMissionFinished(this ProtoCrewMember kerbal, double currentTime)
         {
-            var kerbalExt = CrewRandRRoster.Instance.GetExtForKerbal(kerbal);
+            CrewRandRRoster.KerbalExtData   kerbalExt = CrewRandRRoster.Instance.GetExtForKerbal(kerbal);
 
             // Ignore ineligible kerbals, to avoid logging bogus messages about
             // tourists finishing missions.  (Since their data doesn't get
