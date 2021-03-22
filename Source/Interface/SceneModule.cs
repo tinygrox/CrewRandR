@@ -72,7 +72,7 @@ namespace CrewRandR.Interface
                     }
                 }
 
-                 CrewAssignmentDialog.Instance.RefreshCrewLists(originalVesselManifest, true, true);
+                 CrewAssignmentDialog.Instance.RefreshCrewLists(originalVesselManifest, true, false);
             }
         }
 
@@ -116,7 +116,7 @@ namespace CrewRandR.Interface
                 partManifest.AddCrewToOpenSeats(CrewRandR.Instance.GetCrewForPart(partManifest.PartInfo.partPrefab, manifest.GetAllCrew(false), vets));
             }
 
-            CrewAssignmentDialog.Instance.RefreshCrewLists(manifest, true, true);
+            CrewAssignmentDialog.Instance.RefreshCrewLists(manifest, true, false);
             
         }
 

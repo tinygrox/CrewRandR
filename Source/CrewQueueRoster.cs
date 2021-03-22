@@ -145,7 +145,7 @@ namespace CrewRandR
                 return;
             }
             Logging.Info("CrewAssignmentDialog.Instance.RefreshCrewLists");
-            CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, true);
+            CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, false);
         }
 
         public static void RestoreVacationingCrew()
@@ -168,7 +168,7 @@ namespace CrewRandR
                 return;
             }
             Logging.Info("CrewAssignmentDialog.Instance.RefreshCrewLists");
-            CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, true);
+            CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, false);
         }
 
         // Our storage node type.
