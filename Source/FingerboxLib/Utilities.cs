@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FingerboxLib
+namespace CrewRandR
 {
     public class Utilities
     {
