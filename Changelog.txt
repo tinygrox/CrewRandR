@@ -1,5 +1,9 @@
 ChangeLog
 
+1.1.11.2
+	Updated version file for 1.12
+	Updated dll name for better CKAN compatibility
+
 1.1.11.1
 	Thanks to @gotmachine for this:
 		Changed calls to CrewAssignmentDialog.Instance.RefreshCrewLists to change third parameter to false to avoid a KSP bug where the PAW wouldconstant re-instantiation of the PAW by UIPartActionController .Update(), generating huge lag that result in PAWs becoming very unresponsive.
