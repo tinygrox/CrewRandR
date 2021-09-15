@@ -45,6 +45,7 @@ namespace CrewRandR.Interface
     {
         public void CleanManifest()
         {
+            Logging.Info("CleanManifest");
             if ( CrewAssignmentDialog.Instance != null)
             {
                 VesselCrewManifest originalVesselManifest =  CrewAssignmentDialog.Instance.GetManifest();
@@ -105,6 +106,7 @@ namespace CrewRandR.Interface
 
         public void OnFillButton()
         {
+            Logging.Info("OnFillButton");
             VesselCrewManifest manifest =  CrewAssignmentDialog.Instance.GetManifest();
 
             Logging.Debug("Attempting to fill...");

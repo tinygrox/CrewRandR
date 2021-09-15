@@ -64,7 +64,7 @@ namespace FingerboxLib
             StackFrame frame = new StackFrame(2);
             var method = frame.GetMethod();
 
-            UnityEngine.Debug.Log("[" + DateTime.Now + "][" + type + "][" + method.DeclaringType.Namespace + "." + method.Name + "][" + message + "]"); 
+            UnityEngine.Debug.Log("[CrewRandR][" + type + "][" + method.DeclaringType.Namespace + "." + method.Name + "][" + message + "]"); 
         }
     }
 }

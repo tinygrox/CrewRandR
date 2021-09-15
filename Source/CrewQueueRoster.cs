@@ -145,7 +145,7 @@ namespace CrewRandR
                 return;
             }
             Logging.Info("CrewAssignmentDialog.Instance.RefreshCrewLists");
-            CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, false);
+            CrewAssignmentDialog.Instance.RefreshCrewLists( CrewAssignmentDialog.Instance.GetManifest(), true, true);
         }
 
         public static void RestoreVacationingCrew()

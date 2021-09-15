@@ -1,5 +1,8 @@
 ChangeLog
 
+1.1.11.3
+	Fixed Kerbals on vacation showing on screen in the editor
+
 1.1.11.2
 	Updated version file for 1.12
 	Updated dll name for better CKAN compatibility
