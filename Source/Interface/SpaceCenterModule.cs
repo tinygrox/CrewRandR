@@ -60,6 +60,18 @@ namespace CrewRandR.Interface
             updateCnt = UPDATE_CNT;
         }
 
+        protected override void OnDestroy()
+        {
+            GameEvents.onGUILaunchScreenVesselSelected.Remove(onVesselSelected);
+            GameEvents.onGUIAstronautComplexSpawn.Remove(onGUIAstronautComplexSpawn);
+            GameEvents.onGUIAstronautComplexDespawn.Remove(onGUIAstronautComplexDespawn);
+            GameEvents.onGUILaunchScreenSpawn.Remove(onGUILaunchScreenSpawn);
+            GameEvents.onGUILaunchScreenDespawn.Remove(onGUILaunchScreenDespawn);
+            GameEvents.OnCrewmemberHired.Remove(onCrewmemberHired);
+
+            base.OnDestroy();
+        }
+
         // Doing the update a single time fails since when this is called, it hasn't yet finalized
         // So we do it UPDATE_CNT times and then stop
 

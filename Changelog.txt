@@ -1,5 +1,8 @@
 ChangeLog
 
+1.1.11.4
+	Fixed some memory leaks
+
 1.1.11.3
 	Fixed Kerbals on vacation showing on screen in the editor
 

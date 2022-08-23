@@ -50,10 +50,16 @@ namespace CrewRandR.Interface
             GameEvents.onEditorLoad.Add(OnEditorLoad);
             GameEvents.onEditorScreenChange.Add(OnEditorScreenChanged);
         }
-#if false
+#if true
         protected override void OnDestroy()
         {
-            CrewRandRRoster.RestoreVacationingCrew();
+            //CrewRandRRoster.RestoreVacationingCrew();
+
+            GameEvents.onEditorStarted.Remove(OnEditorStarted);
+            GameEvents.onEditorPodPicked.Remove(OnEditorPodPicked);
+            GameEvents.onEditorLoad.Remove(OnEditorLoad);
+            GameEvents.onEditorScreenChange.Remove(OnEditorScreenChanged);
+
             base.OnDestroy();
         }
 #endif

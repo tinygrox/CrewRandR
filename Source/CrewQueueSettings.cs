@@ -90,7 +90,7 @@ namespace CrewRandR
             GameEvents.onFlightReady.Add(onFlightReady);
         }
 
-        void Destroy()
+        void OnDestroy()
         {
             _Instance = null;
 
