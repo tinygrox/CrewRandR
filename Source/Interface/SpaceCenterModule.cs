@@ -29,6 +29,7 @@ using UnityEngine;
 using KSP.UI;
 using KSP.UI.Screens;
 using FingerboxLib;
+using KSP.Localization;
 
 namespace CrewRandR.Interface
 {
@@ -89,7 +90,8 @@ namespace CrewRandR.Interface
                     if (crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime() > 0)
                     {
                         Logging.Debug("relabeling: " + crewContainer.GetName());
-                        string label = "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime());
+                        string label = Localizer.Format("#CrewRR_CrewReadyIn", Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime())); 
+                        // "Ready In: " + Utilities.GetFormattedTime(crewContainer.GetCrewRef().VacationExpiry() - Planetarium.GetUniversalTime())
                         crewContainer.SetLabel(label);
                     }
                 }

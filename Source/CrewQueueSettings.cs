@@ -187,23 +187,23 @@ namespace CrewRandR
 #endif
         public bool enabled = true;
 
-        [GameParameters.CustomIntParameterUI("Max Short Mission Length (hours)", minValue = 1, maxValue = 24,
-    toolTip = "Max time to be considered a 'short' mission")]
+        [GameParameters.CustomIntParameterUI("#CrewRR_Settings_ShortMissionMaxLength", minValue = 1, maxValue = 24, // Max Short Mission Length (hours)
+    toolTip = "#CrewRR_Settings_ShortMissionMaxLength_desc")] // Max time to be considered a 'short' mission
         public int ShortMissionMaxLength = 4;
 
 
-        [GameParameters.CustomIntParameterUI("Minimum vacation hours for Short mission", minValue = 1, maxValue = 24,
-            toolTip = "Minimum time for vacation for a short mission, overrides the calculated vacation")]
+        [GameParameters.CustomIntParameterUI("#CrewRR_Settings_MinimumVacationHours", minValue = 1, maxValue = 24, // Minimum vacation hours for Short mission
+            toolTip = "#CrewRR_Settings_MinimumVacationHours_desc")] // Minimum time for vacation for a short mission, overrides the calculated vacation
         public int MinimumVacationHours = 1;
 
 
-        [GameParameters.CustomIntParameterUI("Maximum vacation hours for Short mission", minValue = 1, maxValue = 24,
-            toolTip = "Maximum time for vacation for a short mission, overrides the calculated vacation")]
+        [GameParameters.CustomIntParameterUI("#CrewRR_Settings_MaximumVacationHours", minValue = 1, maxValue = 24, // Maximum vacation hours for Short mission
+            toolTip = "#CrewRR_Settings_MaximumVacationHours_desc")] // Maximum time for vacation for a short mission, overrides the calculated vacation
         public int MaximumVacationHours = 6;
 
 
 
-        [GameParameters.CustomParameterUI("Automatically select crew?")]
+        [GameParameters.CustomParameterUI("#CrewRR_Settings_AutoAssignCrews")] // Automatically select crew?
         public bool AssignCrews = true;
 
         // The following crazy code is due to a bug introduced in 1.2.2
@@ -214,21 +214,21 @@ namespace CrewRandR
 
 
         public float vacationScalar = 0.1F;
-        [GameParameters.CustomFloatParameterUI("Base vacation rate (%)", displayFormat = "N0", minValue = 0, maxValue = 100, stepCount = 1, asPercentage = false,
-            toolTip = "The vacation time will be calculated by multiplying the mission length by this")]
+        [GameParameters.CustomFloatParameterUI("#CrewRR_Settings_vacationScalar", displayFormat = "N0", minValue = 0, maxValue = 100, stepCount = 1, asPercentage = false, // Base vacation rate (%)
+            toolTip = "#CrewRR_Settings_vacationScalar_desc")] // The vacation time will be calculated by multiplying the mission length by this
         public float VacationScalar
         {
             get { return vacationScalar * 100; }
             set { vacationScalar = value / 100.0f; }
         }
 
-        [GameParameters.CustomIntParameterUI("Minimum vacation days", minValue = 1, maxValue = 100,
-            toolTip = "Minimum time for vacation, overrides the calculated vacation")]
+        [GameParameters.CustomIntParameterUI("#CrewRR_Settings_MinimumVacationDays", minValue = 1, maxValue = 100, // Minimum vacation days
+            toolTip = "#CrewRR_Settings_MinimumVacationDays_desc")] // Minimum time for vacation, overrides the calculated vacation
         public int MinimumVacationDays = 7;         
 
 
-        [GameParameters.CustomIntParameterUI("Maximum vacation days", minValue = 1, maxValue = 100,
-            toolTip = "Maximum time for vacation, overrides the calculated vacation")]
+        [GameParameters.CustomIntParameterUI("#CrewRR_Settings_MaximumVacationDays", minValue = 1, maxValue = 100, // Maximum vacation days
+            toolTip = "#CrewRR_Settings_MaximumVacationDays_desc")] // Maximum time for vacation, overrides the calculated vacation
         public int MaximumVacationDays = 28;          
 
 
